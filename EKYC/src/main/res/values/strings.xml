@@ -9,7 +9,7 @@
     <string name="card_blurred">The document is not blurred, dark or bright</string>
     <string name="text_back_top">We need the back side of your Driver’s \nLicense photograph to verify your identity</string>
     <string name="text_back_bottom">Place the document on a flat surface, make \nsure the frame covers the whole document \nand the image is not blurry, dark or bright and \nthen press the shutter </string>
-    <string name="text_portrait_top">We need the front side of your Driver’s \nLicense photograph to verify your identity</string>
+    <string name="text_portrait_top">We need the portrait with phone number of your \nDriver’s License photograph to verify your identity</string>
     <string name="whole_face">Position your whole face in the frame without \nmask and follow the guideline</string>
     <string name="face_straight">Please look straight</string>
     <string name="right_face">Next step move your face slowly to the right \nand back</string>

@@ -1,4 +1,4 @@
-package com.example.ekyc.ui.back
+package com.example.ekyc.ui.portrait
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,28 +9,29 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.ekyc.R
 import com.example.ekyc.base.BaseDataBindingFragment
 import com.example.ekyc.base.SDKMainViewModel
-import com.example.ekyc.databinding.FragmentCameraConfirmBackBinding
+import com.example.ekyc.databinding.FragmentCameraConfirmPortraitBinding
+import com.example.ekyc.ui.back.CameraBackFragment
 import com.example.ekyc.ui.face.CameraWholeFaceFragment
-import com.example.ekyc.ui.portrait.CameraPortraitFragment
+import com.example.ekyc.ui.front.CameraFrontFragment
 import com.example.ekyc.utils.extension.addFragment
 
-internal class CameraConfirmBackFragment : BaseDataBindingFragment<FragmentCameraConfirmBackBinding, CameraConfirmBackViewModel>() {
+internal class CameraConfirmPortraitFragment : BaseDataBindingFragment<FragmentCameraConfirmPortraitBinding, CameraConfirmPortraitViewModel>() {
 
-    private lateinit var viewModel : SDKMainViewModel
+    private lateinit var viewModel: SDKMainViewModel
 
 
     companion object {
 
         fun newInstance() =
-            CameraConfirmBackFragment().apply {
-                arguments = Bundle()
+            CameraConfirmPortraitFragment().apply {
+
             }
     }
 
-    override fun layoutResId(): Int = R.layout.fragment_camera_confirm_back
+    override fun layoutResId(): Int = R.layout.fragment_camera_confirm_portrait
 
     override fun onBackFragmentPressed() {
-
+        TODO("Not yet implemented")
     }
 
     override fun onLeftIconClick() {
@@ -53,15 +54,11 @@ internal class CameraConfirmBackFragment : BaseDataBindingFragment<FragmentCamer
                 mBinding.ivCard.setImageBitmap(bitmap)
             }
         }
-
-
-
         mBinding.btnRetake.setOnClickListener {
-            parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
-        }
-        mBinding.btnContinue.setOnClickListener {
             parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
         }
+        mBinding.btnContinue.setOnClickListener {
+            parentFragmentManager.addFragment(fragment = CameraWholeFaceFragment.newInstance())
+        }
     }
-
 }
