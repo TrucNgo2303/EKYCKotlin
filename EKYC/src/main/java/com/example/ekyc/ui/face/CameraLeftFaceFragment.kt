@@ -7,11 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.ekyc.R
 import com.example.ekyc.base.BaseDataBindingFragment
-import com.example.ekyc.databinding.FragmentCameraStraightFaceBinding
+import com.example.ekyc.databinding.FragmentCameraLeftFaceBinding
 
-internal class CameraStraightFaceFragment : BaseDataBindingFragment<FragmentCameraStraightFaceBinding, CameraStraightViewModel>() {
+internal class CameraLeftFaceFragment : BaseDataBindingFragment<FragmentCameraLeftFaceBinding, CameraLeftViewModel>() {
 
-    override fun layoutResId(): Int = R.layout.fragment_camera_straight_face
+
+
+    companion object {
+
+        fun newInstance() =
+            CameraLeftFaceFragment().apply {
+                arguments = Bundle()
+            }
+    }
+
+    override fun layoutResId(): Int = R.layout.fragment_camera_left_face
 
     override fun onBackFragmentPressed() {
         TODO("Not yet implemented")
@@ -25,14 +35,5 @@ internal class CameraStraightFaceFragment : BaseDataBindingFragment<FragmentCame
 
     override fun initialize() {
         onLeftIconClick()
-
-    }
-
-
-    companion object {
-        fun newInstance() =
-            CameraStraightFaceFragment().apply {
-                arguments = Bundle()
-            }
     }
 }

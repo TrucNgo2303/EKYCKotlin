@@ -51,7 +51,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_title"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:background="@drawable/ic_assignment_ind"
+            android:background="@drawable/ic_face"
             />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_text_top"
@@ -60,7 +60,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_assignment"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:text="@string/whole_face"
+            android:text="@string/left_face"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:layout_marginTop="8dp"
@@ -69,15 +69,13 @@
         <androidx.camera.view.PreviewView
             android:id="@+id/previewView"
             android:layout_width="300dp"
-            android:layout_height="300dp"
             android:layout_margin="24dp"
+            android:layout_height="300dp"
             app:layout_constraintTop_toBottomOf="@id/tv_text_top"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:scaleType="fitCenter"
-            android:clipToOutline="true"
-            android:background="@drawable/circular_frame" />
-
+            android:background="@drawable/circular_frame"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

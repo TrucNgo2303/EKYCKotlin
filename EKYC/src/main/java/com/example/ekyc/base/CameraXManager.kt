@@ -141,7 +141,6 @@ internal class CameraXManager(
                     } else {
                         onBitmapCapture(finalBitmap)
                     }
-
                     // Xử lý ảnh Bitmap tại đây (hiển thị, xử lý, v.v.)
 
                     imageProxy.close() // Đừng quên đóng imageProxy sau khi sử dụng xong
@@ -176,6 +175,7 @@ internal class CameraXManager(
         matrix.postRotate(rotationDegrees.toFloat())
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
+
 
     private fun rotateAndFlipBitmap(bitmap: Bitmap, degrees: Int): Bitmap {
         val matrix = Matrix().apply {
@@ -218,6 +218,7 @@ internal class CameraXManager(
         if (mediaImage != null) {
             val imageRotation = imageProxy.imageInfo.rotationDegrees
             val inputImage = InputImage.fromMediaImage(mediaImage, imageRotation)
+
             detector?.let {
                 it.process(inputImage)
                     .addOnSuccessListener { faces ->
