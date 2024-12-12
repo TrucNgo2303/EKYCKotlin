@@ -1,0 +1,17 @@
+<resources>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_front_top">We need the front side of your Driver’s \nLicense photograph to verify your identity</string>
+    <string name="text_front_bottom">Place the document on a flat surface, make \nsure the frame covers the whole document \nand the image is not blurry, dark or bright \nand then press the shutter </string>
+    <string name="guide_text">Guide to taking Driver’s License photo</string>
+    <string name="card_valid">The document is original and still valid</string>
+    <string name="card_unoriginal">Do not use edited, unoriginal documents</string>
+    <string name="card_punched">The document is not cut corners, punched and contains strange objects inside</string>
+    <string name="card_blurred">The document is not blurred, dark or bright</string>
+    <string name="text_back_top">We need the back side of your Driver’s \nLicense photograph to verify your identity</string>
+    <string name="text_back_bottom">Place the document on a flat surface, make \nsure the frame covers the whole document \nand the image is not blurry, dark or bright and \nthen press the shutter </string>
+    <string name="text_portrait_top">We need the front side of your Driver’s \nLicense photograph to verify your identity</string>
+    <string name="whole_face">Position your whole face in the frame without \nmask and follow the guideline</string>
+    <string name="face_straight">Please look straight</string>
+    <string name="right_face">Next step move your face slowly to the right \nand back</string>
+    <string name="left_face">Then move your face slowly to the left \nand back</string>
+</resources>
