@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background Shape -->
+    <item>
+        <shape>
+            <solid android:color="@android:color/darker_gray"/>
+            <corners android:radius="16dp"/>
+            <size android:width="200dp" android:height="48dp"/>
+            <stroke android:color="@android:color/black" android:width="1dp"/>
+        </shape>
+    </item>
+
+    <!-- Image at the center -->
+    <item android:right="1000dp" android:left="1000dp" android:top="1000dp" android:bottom="1000dp">
+        <bitmap android:src="@drawable/ic_image" android:gravity="center"/>
+    </item>
+</layer-list>

@@ -11,6 +11,7 @@ import com.example.ekyc.base.BaseDataBindingFragment
 import com.example.ekyc.base.SDKMainViewModel
 import com.example.ekyc.databinding.FragmentCameraConfirmPortraitBinding
 import com.example.ekyc.ui.back.CameraBackFragment
+import com.example.ekyc.ui.document.RegisterInfoFragment
 import com.example.ekyc.ui.face.CameraWholeFaceFragment
 import com.example.ekyc.ui.front.CameraFrontFragment
 import com.example.ekyc.utils.extension.addFragment
@@ -58,7 +59,7 @@ internal class CameraConfirmPortraitFragment : BaseDataBindingFragment<FragmentC
             parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
         }
         mBinding.btnContinue.setOnClickListener {
-            parentFragmentManager.addFragment(fragment = CameraWholeFaceFragment.newInstance())
+            parentFragmentManager.addFragment(fragment = RegisterInfoFragment.newInstance())
         }
     }
 }

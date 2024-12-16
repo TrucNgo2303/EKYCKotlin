@@ -4,13 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.document.UnverifiedImageFragment">
 
-    <data>
-
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_action_bar"
             android:layout_width="match_parent"
@@ -62,9 +58,8 @@
             />
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_retake_front"
-            android:layout_width="0dp"
+            android:layout_width="180dp"
             android:layout_height="40dp"
-            app:layout_constraintWidth_toWidthOf="@id/img_front_side"
             app:layout_constraintBottom_toBottomOf="@id/img_front_side"
             app:layout_constraintLeft_toLeftOf="@id/img_front_side"
             app:layout_constraintRight_toRightOf="@id/img_front_side"
@@ -114,9 +109,8 @@
             />
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_retake_back"
-            android:layout_width="0dp"
+            android:layout_width="180dp"
             android:layout_height="40dp"
-            app:layout_constraintWidth_toWidthOf="@id/img_back_side"
             app:layout_constraintBottom_toBottomOf="@id/img_back_side"
             app:layout_constraintLeft_toLeftOf="@id/img_back_side"
             app:layout_constraintRight_toRightOf="@id/img_back_side"
@@ -166,9 +160,8 @@
             />
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_retake_portrait"
-            android:layout_width="0dp"
+            android:layout_width="180dp"
             android:layout_height="40dp"
-            app:layout_constraintWidth_toWidthOf="@id/img_portrait"
             app:layout_constraintBottom_toBottomOf="@id/img_portrait"
             app:layout_constraintLeft_toLeftOf="@id/img_portrait"
             app:layout_constraintRight_toRightOf="@id/img_portrait"
@@ -218,9 +211,8 @@
             />
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_retake_with_pn"
-            android:layout_width="0dp"
+            android:layout_width="180dp"
             android:layout_height="40dp"
-            app:layout_constraintWidth_toWidthOf="@id/img_with_pn"
             app:layout_constraintBottom_toBottomOf="@id/img_with_pn"
             app:layout_constraintLeft_toLeftOf="@id/img_with_pn"
             app:layout_constraintRight_toRightOf="@id/img_with_pn"
@@ -274,6 +266,23 @@
             android:layout_margin="16dp"
             />
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_continue_true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:background="@drawable/button_background_green"
+            android:text="Continue"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:padding="12dp"
+            android:layout_margin="16dp"
+            android:visibility="gone"
+            />
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_continue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -301,6 +310,5 @@
             android:layout_marginBottom="32dp"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </layout>
