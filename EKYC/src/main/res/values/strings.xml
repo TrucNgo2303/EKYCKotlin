@@ -14,4 +14,5 @@
     <string name="face_straight">Please look straight</string>
     <string name="right_face">Next step move your face slowly to the right \nand back</string>
     <string name="left_face">Then move your face slowly to the left \nand back</string>
+    <string name="unverified_image">There is an unverified image, if you choose \nto continue you must wait 15 - 30 minutes \nfor check by support team.</string>
 </resources>
