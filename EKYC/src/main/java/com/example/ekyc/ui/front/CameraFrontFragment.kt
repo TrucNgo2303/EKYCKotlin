@@ -53,7 +53,7 @@ internal class CameraFrontFragment :BaseDataBindingFragment<FragmentCameraFrontB
                 Toast.makeText(requireContext(),"Ảnh đã được chụp",Toast.LENGTH_SHORT).show()
                 // Lưu ảnh vào ViewModel
                 bitmap?.let {
-                    viewModel.saveImage(it)
+                    viewModel.saveFrontImage(it)
                 }
             }
             parentFragmentManager.addFragment(fragment = CameraConfirmFrontFragment.newInstance())
@@ -77,7 +77,7 @@ internal class CameraFrontFragment :BaseDataBindingFragment<FragmentCameraFrontB
         super.onDestroyView()
         cameraXManager.stopCamera()
     }
-    private fun saveImageAfterCapture(bitmap: Bitmap) {
-        viewModel.saveImage(bitmap)
-    }
+//    private fun saveImageAfterCapture(bitmap: Bitmap) {
+//        viewModel.saveFrontImage(bitmap)
+//    }
 }

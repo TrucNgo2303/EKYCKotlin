@@ -94,8 +94,28 @@
             app:layout_constraintBottom_toBottomOf="@id/previewView"
             app:layout_constraintLeft_toLeftOf="@id/previewView"
             app:layout_constraintRight_toRightOf="@id/previewView"
-            android:background="@drawable/circle_border_success"
-            android:visibility="gone"
+            android:background="@drawable/circle_border_1"
+
+            />
+        <View
+            android:layout_width="330dp"
+            android:layout_height="330dp"
+            app:layout_constraintTop_toTopOf="@id/previewView"
+            app:layout_constraintBottom_toBottomOf="@id/previewView"
+            app:layout_constraintLeft_toLeftOf="@id/previewView"
+            app:layout_constraintRight_toRightOf="@id/previewView"
+            android:background="@drawable/circle_border_2"
+
+            />
+        <View
+            android:layout_width="330dp"
+            android:layout_height="330dp"
+            app:layout_constraintTop_toTopOf="@id/previewView"
+            app:layout_constraintBottom_toBottomOf="@id/previewView"
+            app:layout_constraintLeft_toLeftOf="@id/previewView"
+            app:layout_constraintRight_toRightOf="@id/previewView"
+            android:background="@drawable/circle_border_3"
+
             />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_error_face_recorded"

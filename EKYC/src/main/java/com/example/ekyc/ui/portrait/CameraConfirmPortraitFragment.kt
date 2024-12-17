@@ -1,19 +1,11 @@
 package com.example.ekyc.ui.portrait
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.example.ekyc.R
 import com.example.ekyc.base.BaseDataBindingFragment
 import com.example.ekyc.base.SDKMainViewModel
 import com.example.ekyc.databinding.FragmentCameraConfirmPortraitBinding
-import com.example.ekyc.ui.back.CameraBackFragment
-import com.example.ekyc.ui.document.RegisterInfoFragment
-import com.example.ekyc.ui.face.CameraWholeFaceFragment
-import com.example.ekyc.ui.front.CameraFrontFragment
+import com.example.ekyc.ui.document.UnverifiedImageFragment
 import com.example.ekyc.utils.extension.addFragment
 
 internal class CameraConfirmPortraitFragment : BaseDataBindingFragment<FragmentCameraConfirmPortraitBinding, CameraConfirmPortraitViewModel>() {
@@ -48,7 +40,7 @@ internal class CameraConfirmPortraitFragment : BaseDataBindingFragment<FragmentC
         viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
 
         // Lắng nghe thay đổi trong LiveData và xử lý ảnh khi có sự thay đổi
-        viewModel.frontImage.observe(viewLifecycleOwner) { bitmap ->
+        viewModel.portraitImage.observe(viewLifecycleOwner) { bitmap ->
             // Xử lý ảnh ở đây khi LiveData thay đổi
             if (bitmap != null) {
                 // Sử dụng bitmap ở đây
@@ -59,7 +51,7 @@ internal class CameraConfirmPortraitFragment : BaseDataBindingFragment<FragmentC
             parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
         }
         mBinding.btnContinue.setOnClickListener {
-            parentFragmentManager.addFragment(fragment = RegisterInfoFragment.newInstance())
+            parentFragmentManager.addFragment(fragment = UnverifiedImageFragment.newInstance())
         }
     }
 }

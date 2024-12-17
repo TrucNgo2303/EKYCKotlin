@@ -1,16 +1,11 @@
 package com.example.ekyc.ui.back
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.example.ekyc.R
 import com.example.ekyc.base.BaseDataBindingFragment
 import com.example.ekyc.base.SDKMainViewModel
 import com.example.ekyc.databinding.FragmentCameraConfirmBackBinding
-import com.example.ekyc.ui.face.CameraWholeFaceFragment
 import com.example.ekyc.ui.portrait.CameraPortraitFragment
 import com.example.ekyc.utils.extension.addFragment
 
@@ -46,7 +41,7 @@ internal class CameraConfirmBackFragment : BaseDataBindingFragment<FragmentCamer
         viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
 
         // Lắng nghe thay đổi trong LiveData và xử lý ảnh khi có sự thay đổi
-        viewModel.frontImage.observe(viewLifecycleOwner) { bitmap ->
+        viewModel.backImage.observe(viewLifecycleOwner) { bitmap ->
             // Xử lý ảnh ở đây khi LiveData thay đổi
             if (bitmap != null) {
                 // Sử dụng bitmap ở đây

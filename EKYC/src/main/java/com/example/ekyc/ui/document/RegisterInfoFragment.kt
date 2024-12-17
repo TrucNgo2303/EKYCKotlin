@@ -10,14 +10,17 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.lifecycle.ViewModelProvider
 import com.example.ekyc.R
 import com.example.ekyc.base.BaseDataBindingFragment
+import com.example.ekyc.base.SDKMainViewModel
 import com.example.ekyc.databinding.FragmentRegisterInfoBinding
 import com.example.ekyc.ui.front.CameraFrontFragment
 import com.example.ekyc.utils.extension.addFragment
 
 internal class RegisterInfoFragment : BaseDataBindingFragment<FragmentRegisterInfoBinding,RegisterInfoViewModel>() {
 
+    private lateinit var sdkViewModel: SDKMainViewModel
 
     companion object {
 
@@ -71,4 +74,5 @@ internal class RegisterInfoFragment : BaseDataBindingFragment<FragmentRegisterIn
         // Hiển thị PopupWindow phía dưới Button
         popupWindow.showAsDropDown(view, 0, 10)
     }
+
 }

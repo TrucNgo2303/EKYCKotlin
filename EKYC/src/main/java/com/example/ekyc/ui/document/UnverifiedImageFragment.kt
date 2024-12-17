@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.example.ekyc.R
 import com.example.ekyc.base.BaseDataBindingFragment
+import com.example.ekyc.base.SDKMainViewModel
 import com.example.ekyc.databinding.FragmentUnverifiedImageBinding
 import com.example.ekyc.ui.back.CameraBackFragment
 import com.example.ekyc.ui.front.CameraFrontFragment
@@ -15,6 +17,7 @@ import com.example.ekyc.utils.extension.addFragment
 
 internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverifiedImageBinding, UnverifiedViewModel>() {
 
+    private lateinit var sdkViewModel: SDKMainViewModel
 
     companion object {
         fun newInstance() =
@@ -37,6 +40,9 @@ internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverif
 
     override fun initialize() {
         onLeftIconClick()
+
+        allImage()
+
         mBinding.btnContinue.setOnClickListener {
             activity?.finish()
         }
@@ -54,6 +60,38 @@ internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverif
         }
         mBinding.btnRetakeWithPn.setOnClickListener {
             parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
+        }
+    }
+    private fun allImage(){
+        // Truy cập ViewModel từ Activity
+        sdkViewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
+
+        // Lấy ảnh mặt trước căn cước
+        sdkViewModel.frontImage.observe(viewLifecycleOwner) { bitmap ->
+            // Xử lý ảnh ở đây khi LiveData thay đổi
+            if (bitmap != null) {
+                // Sử dụng bitmap ở đây
+                mBinding.imgFrontSide.setImageBitmap(bitmap)
+            }
+        }
+
+        // Lấy ảnh mặt sau căn cước
+        sdkViewModel.backImage.observe(viewLifecycleOwner) { bitmap ->
+            // Xử lý ảnh ở đây khi LiveData thay đổi
+            if (bitmap != null) {
+                // Sử dụng bitmap ở đây
+                mBinding.imgBackSide.setImageBitmap(bitmap)
+            }
+        }
+
+
+        // Lấy ảnh chính giữa với số điện thoại
+        sdkViewModel.portraitImage.observe(viewLifecycleOwner) { bitmap ->
+            // Xử lý ảnh ở đây khi LiveData thay đổi
+            if (bitmap != null) {
+                // Sử dụng bitmap ở đây
+                mBinding.imgWithPn.setImageBitmap(bitmap)
+            }
         }
     }
 }

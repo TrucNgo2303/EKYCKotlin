@@ -57,7 +57,7 @@ internal class CameraPortraitFragment : BaseDataBindingFragment<FragmentCameraPo
                 Toast.makeText(requireContext(),"Ảnh đã được chụp", Toast.LENGTH_SHORT).show()
                 // Lưu ảnh vào ViewModel
                 bitmap?.let {
-                    viewModel.saveImage(it)
+                    viewModel.savePortraitImage(it)
                 }
             }
             parentFragmentManager.addFragment(fragment = CameraConfirmPortraitFragment.newInstance())

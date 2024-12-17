@@ -62,7 +62,7 @@ internal class CameraBackFragment : BaseDataBindingFragment<FragmentCameraBackBi
                 Toast.makeText(requireContext(),"Ảnh đã được chụp", Toast.LENGTH_SHORT).show()
                 // Lưu ảnh vào ViewModel
                 bitmap?.let {
-                    viewModel.saveImage(it)
+                    viewModel.saveBackImage(it)
                 }
             }
             parentFragmentManager.addFragment(fragment = CameraConfirmBackFragment.newInstance())
