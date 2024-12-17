@@ -8,6 +8,10 @@ import android.view.ViewGroup
 import com.example.ekyc.R
 import com.example.ekyc.base.BaseDataBindingFragment
 import com.example.ekyc.databinding.FragmentUnverifiedImageBinding
+import com.example.ekyc.ui.back.CameraBackFragment
+import com.example.ekyc.ui.front.CameraFrontFragment
+import com.example.ekyc.ui.portrait.CameraPortraitFragment
+import com.example.ekyc.utils.extension.addFragment
 
 internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverifiedImageBinding, UnverifiedViewModel>() {
 
@@ -26,10 +30,30 @@ internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverif
     }
 
     override fun onLeftIconClick() {
-        TODO("Not yet implemented")
+        mBinding.imgArrowBack.setOnClickListener {
+            parentFragmentManager.addFragment(fragment = CameraFrontFragment.newInstance())
+        }
     }
 
     override fun initialize() {
-        TODO("Not yet implemented")
+        onLeftIconClick()
+        mBinding.btnContinue.setOnClickListener {
+            activity?.finish()
+        }
+        mBinding.btnRetryAll.setOnClickListener {
+            parentFragmentManager.addFragment(fragment = CameraFrontFragment.newInstance())
+        }
+        mBinding.btnRetakeFront.setOnClickListener {
+            parentFragmentManager.addFragment(fragment = CameraFrontFragment.newInstance())
+        }
+        mBinding.btnRetakeBack.setOnClickListener {
+            parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
+        }
+        mBinding.btnRetakePortrait.setOnClickListener {
+            parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
+        }
+        mBinding.btnRetakeWithPn.setOnClickListener {
+            parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
+        }
     }
 }

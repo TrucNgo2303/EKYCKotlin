@@ -15,4 +15,6 @@
     <string name="right_face">Next step move your face slowly to the right \nand back</string>
     <string name="left_face">Then move your face slowly to the left \nand back</string>
     <string name="unverified_image">There is an unverified image, if you choose \nto continue you must wait 15 - 30 minutes \nfor check by support team.</string>
+    <string name="face_recorded_success">Thank you. Your face has been recorded \nsuccessfully!</string>
+    <string name="face_fail">Face recognition not possible, if you choose \nto continue you must wait 15 - 30 minutes \nfor check by support team.</string>
 </resources>

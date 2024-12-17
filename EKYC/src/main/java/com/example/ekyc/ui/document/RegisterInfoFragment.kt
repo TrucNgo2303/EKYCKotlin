@@ -13,6 +13,8 @@ import androidx.appcompat.widget.AppCompatTextView
 import com.example.ekyc.R
 import com.example.ekyc.base.BaseDataBindingFragment
 import com.example.ekyc.databinding.FragmentRegisterInfoBinding
+import com.example.ekyc.ui.front.CameraFrontFragment
+import com.example.ekyc.utils.extension.addFragment
 
 internal class RegisterInfoFragment : BaseDataBindingFragment<FragmentRegisterInfoBinding,RegisterInfoViewModel>() {
 
@@ -32,10 +34,13 @@ internal class RegisterInfoFragment : BaseDataBindingFragment<FragmentRegisterIn
     }
 
     override fun onLeftIconClick() {
-        TODO("Not yet implemented")
+        mBinding.imgArrowBack.setOnClickListener {
+            parentFragmentManager.addFragment(fragment = CameraFrontFragment.newInstance())
+        }
     }
 
     override fun initialize() {
+        onLeftIconClick()
         mBinding.btnCalendar.setOnClickListener {
             showCalendarPopup(it, mBinding.tvBirthdayDay)
         }
