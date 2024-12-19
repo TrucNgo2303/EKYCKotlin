@@ -19,6 +19,7 @@ import com.example.ekyc.base.SDKMainViewModel
 import com.example.ekyc.databinding.FragmentCameraFrontBinding
 import com.example.ekyc.ui.main.EKYCMainActivity
 import com.example.ekyc.utils.extension.addFragment
+import com.example.ekyc.utils.extension.addFragmentWithAnimation
 
 internal class CameraFrontFragment :BaseDataBindingFragment<FragmentCameraFrontBinding, CameraFrontViewModel>() {
 
@@ -61,7 +62,7 @@ internal class CameraFrontFragment :BaseDataBindingFragment<FragmentCameraFrontB
 
         //Click View Guide
         mBinding.btnViewGuide.setOnClickListener {
-            parentFragmentManager.addFragment(fragment = ViewGuideFrontFragment.newInstance())
+            parentFragmentManager.addFragmentWithAnimation(fragment = ViewGuideFrontFragment.newInstance())
         }
 
     }
@@ -77,7 +78,4 @@ internal class CameraFrontFragment :BaseDataBindingFragment<FragmentCameraFrontB
         super.onDestroyView()
         cameraXManager.stopCamera()
     }
-//    private fun saveImageAfterCapture(bitmap: Bitmap) {
-//        viewModel.saveFrontImage(bitmap)
-//    }
 }

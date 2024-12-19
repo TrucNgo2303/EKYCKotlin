@@ -1,14 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/white"
     android:padding="10dp">
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_choose_years"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="Chọn năm: "
+        android:textStyle="bold"
+        android:textSize="13sp"
+        android:textColor="@color/black"
+        android:layout_marginLeft="40dp"
+        />
+    <!-- Chọn năm -->
+    <Spinner
+        android:id="@+id/spinnerYear"
+        app:layout_constraintTop_toTopOf="@id/tv_choose_years"
+        app:layout_constraintBottom_toBottomOf="@id/tv_choose_years"
+        app:layout_constraintLeft_toRightOf="@id/tv_choose_years"
+        android:layout_marginLeft="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_choose_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_choose_years"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="Chọn năm: "
+        android:textStyle="bold"
+        android:textSize="13sp"
+        android:textColor="@color/black"
+        android:layout_marginLeft="40dp"
+        />
+
+    <!-- Chọn tháng -->
+    <Spinner
+        android:id="@+id/spinnerMonth"
+        app:layout_constraintTop_toTopOf="@id/tv_choose_month"
+        app:layout_constraintBottom_toBottomOf="@id/tv_choose_month"
+        app:layout_constraintLeft_toRightOf="@id/tv_choose_month"
+        android:layout_marginLeft="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <CalendarView
         android:id="@+id/calendarView"
+        app:layout_constraintTop_toBottomOf="@id/tv_choose_month"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp" />
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,3 +13,19 @@ fun FragmentManager.addFragment(@IdRes id: Int = R.id.frameMain, fragment: Fragm
         .addToBackStack(tag)
         .commit()
 }
+
+fun FragmentManager.addFragmentWithAnimation(
+    @IdRes id: Int = R.id.frameMain,
+    fragment: Fragment,
+    enterAnim: Int = R.anim.slide_up,
+    exitAnim: Int = R.anim.slide_down,
+    popEnterAnim: Int = R.anim.slide_up,
+    popExitAnim: Int = R.anim.slide_down
+) {
+    val tag = fragment::class.java.simpleName
+    beginTransaction()
+        .setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
+        .add(id, fragment, tag)
+        .addToBackStack(tag)
+        .commit()
+}

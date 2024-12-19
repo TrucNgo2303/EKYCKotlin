@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.camera.view.PreviewView
 import com.example.ekyc.R
 import com.example.ekyc.base.BaseDataBindingFragment
@@ -60,15 +61,26 @@ internal class CameraFaceConfirmFragment : BaseDataBindingFragment<FragmentCamer
         Log.d("CameraFragment", "Detected face at: $boundingBox")
 
         // Kiểm tra vị trí của mặt
-        if (isFaceCentered(eulerAngleX, eulerAngleY, boundingBox)) {
-            Log.d("CameraFragment", "Face is centered!")
-        } else if (isFaceOnLeft(eulerAngleX, eulerAngleY, boundingBox)) {
-            Log.d("CameraFragment", "Face is on the left!")
-        } else if (isFaceOnRight(eulerAngleX, eulerAngleY, boundingBox)) {
-            Log.d("CameraFragment", "Face is on the right!")
-        } else {
-            Log.d("CameraFragment", "Face is in an unusual position!")
+        if(isFaceCentered(eulerAngleX,eulerAngleY,boundingBox)){
+            mBinding.tvTextTop.text = getString(R.string.face_straight)
+            mBinding.vCircle1.visibility = View.VISIBLE
+            if(isFaceOnLeft(eulerAngleX,eulerAngleY,boundingBox)){
+                mBinding.vCircle2.visibility = View.VISIBLE
+                mBinding.tvTextTop.text = getString(R.string.left_face)
+                if(isFaceOnRight(eulerAngleX,eulerAngleY,boundingBox)){
+                    mBinding.vCircle3.visibility = View.VISIBLE
+                    mBinding.tvTextTop.text = getString(R.string.right_face)
+                }else{
+                    Toast.makeText(requireContext(),"Khuôn mặt đang không ở bên phải, yêu cầu quét lại",Toast.LENGTH_SHORT).show()
+                }
+            }else{
+                Toast.makeText(requireContext(),"Khuôn mặt đang không ở bên trái, yêu cầu quét lại",Toast.LENGTH_SHORT).show()
+            }
+        }else{
+            Toast.makeText(requireContext(),"Khuôn mặt đang không ở giữa, yêu cầu quét lại",Toast.LENGTH_SHORT).show()
         }
+
+
     }
 
     private fun isFaceCentered(eulerAngleX: Float, eulerAngleY: Float, boundingBox: RectF): Boolean {

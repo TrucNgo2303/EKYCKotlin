@@ -1,22 +1,17 @@
 package com.example.ekyc.ui.document
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.CalendarView
-import android.widget.LinearLayout
-import android.widget.PopupWindow
-import androidx.appcompat.widget.AppCompatButton
+import android.widget.*
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.lifecycle.ViewModelProvider
 import com.example.ekyc.R
 import com.example.ekyc.base.BaseDataBindingFragment
 import com.example.ekyc.base.SDKMainViewModel
 import com.example.ekyc.databinding.FragmentRegisterInfoBinding
 import com.example.ekyc.ui.front.CameraFrontFragment
 import com.example.ekyc.utils.extension.addFragment
+import java.util.*
 
 internal class RegisterInfoFragment : BaseDataBindingFragment<FragmentRegisterInfoBinding,RegisterInfoViewModel>() {
 
@@ -33,7 +28,7 @@ internal class RegisterInfoFragment : BaseDataBindingFragment<FragmentRegisterIn
     override fun layoutResId(): Int = R.layout.fragment_register_info
 
     override fun onBackFragmentPressed() {
-        TODO("Not yet implemented")
+
     }
 
     override fun onLeftIconClick() {
@@ -46,6 +41,12 @@ internal class RegisterInfoFragment : BaseDataBindingFragment<FragmentRegisterIn
         onLeftIconClick()
         mBinding.btnCalendar.setOnClickListener {
             showCalendarPopup(it, mBinding.tvBirthdayDay)
+        }
+        mBinding.btnCalendarIssuanceDate.setOnClickListener {
+            showCalendarPopup(it, mBinding.tvIssuanceDate)
+        }
+        mBinding.btnCalendarExpireDate.setOnClickListener {
+            showCalendarPopup(it, mBinding.tvExpireDate)
         }
     }
     private fun showCalendarPopup(view: View, tv: AppCompatTextView) {
@@ -61,18 +62,72 @@ internal class RegisterInfoFragment : BaseDataBindingFragment<FragmentRegisterIn
             true
         )
 
+        // Lấy Spinner và CalendarView từ layout
+        val spinnerYear = popupView.findViewById<Spinner>(R.id.spinnerYear)
+        val spinnerMonth = popupView.findViewById<Spinner>(R.id.spinnerMonth)
         val calendarView = popupView.findViewById<CalendarView>(R.id.calendarView)
+
+        // Lấy danh sách các năm và tháng
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val years = (currentYear - 50..currentYear + 50).toList() // Ví dụ: Từ năm hiện tại trừ 50 đến cộng 50
+        val months = (1..12).toList()
+
+        // Thiết lập Adapter cho Spinner chọn năm và tháng
+        val yearAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, years)
+        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerYear.adapter = yearAdapter
+
+        // Đặt giá trị mặc định cho spinnerYear là năm hiện tại
+        spinnerYear.setSelection(years.indexOf(currentYear))
+
+        val monthAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, months)
+        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerMonth.adapter = monthAdapter
+
+        // Đặt tháng mặc định là tháng hiện tại
+        spinnerMonth.setSelection(Calendar.getInstance().get(Calendar.MONTH))
+
+        // Cập nhật ngày trên CalendarView khi năm và tháng thay đổi
+        spinnerYear.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                updateCalendar(calendarView, spinnerYear.selectedItem as Int, spinnerMonth.selectedItem as Int)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        })
+
+        spinnerMonth.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                updateCalendar(calendarView, spinnerYear.selectedItem as Int, spinnerMonth.selectedItem as Int)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        })
 
         // Xử lý khi chọn ngày từ CalendarView
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
-            // Tháng bắt đầu từ 0 nên cần +1
-            val selectedDate = "$dayOfMonth/${month + 1}/$year"
-            tv.text = selectedDate // Ghi ngày đã chọn vào Button
+            // Lấy giá trị từ Spinner
+            val selectedYear = spinnerYear.selectedItem.toString().toInt()
+            val selectedMonth = spinnerMonth.selectedItem.toString().toInt()
+
+            // Cập nhật giá trị vào TextView
+            val selectedDate = "$dayOfMonth/$selectedMonth/$selectedYear"
+            tv.text = selectedDate // Ghi ngày đã chọn vào TextView
             popupWindow.dismiss() // Đóng Popup khi chọn xong
         }
 
-        // Hiển thị PopupWindow phía dưới Button
+        // Hiển thị PopupWindow phía dưới View
         popupWindow.showAsDropDown(view, 0, 10)
     }
+
+    private fun updateCalendar(calendarView: CalendarView, year: Int, month: Int) {
+        // Cập nhật lại ngày của CalendarView theo năm và tháng đã chọn
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month - 1, 1) // Month là từ 0-11 nên cần -1
+        calendarView.date = calendar.timeInMillis
+    }
+
+
+
 
 }

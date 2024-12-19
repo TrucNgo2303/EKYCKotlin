@@ -40,27 +40,10 @@ internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverif
 
     override fun initialize() {
         onLeftIconClick()
-
         allImage()
+        clickBtn()
 
-        mBinding.btnContinue.setOnClickListener {
-            activity?.finish()
-        }
-        mBinding.btnRetryAll.setOnClickListener {
-            parentFragmentManager.addFragment(fragment = CameraFrontFragment.newInstance())
-        }
-        mBinding.btnRetakeFront.setOnClickListener {
-            parentFragmentManager.addFragment(fragment = CameraFrontFragment.newInstance())
-        }
-        mBinding.btnRetakeBack.setOnClickListener {
-            parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
-        }
-        mBinding.btnRetakePortrait.setOnClickListener {
-            parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
-        }
-        mBinding.btnRetakeWithPn.setOnClickListener {
-            parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
-        }
+
     }
     private fun allImage(){
         // Truy cập ViewModel từ Activity
@@ -84,7 +67,6 @@ internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverif
             }
         }
 
-
         // Lấy ảnh chính giữa với số điện thoại
         sdkViewModel.portraitImage.observe(viewLifecycleOwner) { bitmap ->
             // Xử lý ảnh ở đây khi LiveData thay đổi
@@ -92,6 +74,26 @@ internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverif
                 // Sử dụng bitmap ở đây
                 mBinding.imgWithPn.setImageBitmap(bitmap)
             }
+        }
+    }
+    private fun clickBtn(){
+        mBinding.btnContinueFail.setOnClickListener {
+            activity?.finish()
+        }
+        mBinding.btnRetryAll.setOnClickListener {
+            parentFragmentManager.addFragment(fragment = CameraFrontFragment.newInstance())
+        }
+        mBinding.btnRetakeFront.setOnClickListener {
+            parentFragmentManager.addFragment(fragment = CameraFrontFragment.newInstance())
+        }
+        mBinding.btnRetakeBack.setOnClickListener {
+            parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
+        }
+        mBinding.btnRetakePortrait.setOnClickListener {
+            parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
+        }
+        mBinding.btnRetakeWithPn.setOnClickListener {
+            parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
         }
     }
 }
