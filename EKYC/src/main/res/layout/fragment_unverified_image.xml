@@ -56,17 +56,7 @@
             app:layout_constraintTop_toBottomOf="@id/cv_action_bar"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintWidth_percent="0.45"
-            android:background="@drawable/button_background_green"
-            />
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_retake_front"
-            android:layout_width="180dp"
-            android:layout_height="40dp"
-            app:layout_constraintBottom_toBottomOf="@id/img_front_side"
-            app:layout_constraintLeft_toLeftOf="@id/img_front_side"
-            app:layout_constraintRight_toRightOf="@id/img_front_side"
-            android:background="@drawable/button_retake_doc"
-            android:visibility="gone"
+            android:background="@color/white"
             />
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ic_fail_front_side"
@@ -105,19 +95,9 @@
             app:layout_constraintTop_toBottomOf="@id/cv_action_bar"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintWidth_percent="0.45"
-            android:background="@drawable/button_background_green"
+            android:background="@color/white"
             android:layout_marginTop="32dp"
             android:layout_marginRight="8dp"
-            />
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_retake_back"
-            android:layout_width="180dp"
-            android:layout_height="40dp"
-            app:layout_constraintBottom_toBottomOf="@id/img_back_side"
-            app:layout_constraintLeft_toLeftOf="@id/img_back_side"
-            app:layout_constraintRight_toRightOf="@id/img_back_side"
-            android:background="@drawable/button_retake_doc"
-            android:visibility="gone"
             />
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ic_fail_back_side"
@@ -156,7 +136,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_front_side"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintWidth_percent="0.45"
-            android:background="@drawable/button_background_green"
+            android:background="@color/white"
             android:layout_marginTop="16dp"
             android:layout_marginLeft="8dp"
             />
@@ -207,19 +187,9 @@
             app:layout_constraintTop_toBottomOf="@id/tv_back_side"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintWidth_percent="0.45"
-            android:background="@drawable/button_background_green"
+            android:background="@color/white"
             android:layout_marginTop="16dp"
             android:layout_marginRight="8dp"
-            />
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_retake_with_pn"
-            android:layout_width="180dp"
-            android:layout_height="40dp"
-            app:layout_constraintBottom_toBottomOf="@id/img_with_pn"
-            app:layout_constraintLeft_toLeftOf="@id/img_with_pn"
-            app:layout_constraintRight_toRightOf="@id/img_with_pn"
-            android:background="@drawable/button_retake_doc"
-            android:visibility="gone"
             />
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ic_fail_pn_side"

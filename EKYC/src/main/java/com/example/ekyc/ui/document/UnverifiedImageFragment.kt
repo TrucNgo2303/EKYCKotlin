@@ -18,6 +18,7 @@ import com.example.ekyc.utils.extension.addFragment
 internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverifiedImageBinding, UnverifiedViewModel>() {
 
     private lateinit var sdkViewModel: SDKMainViewModel
+    private lateinit var viewModel: UnverifiedViewModel
 
     companion object {
         fun newInstance() =
@@ -40,10 +41,9 @@ internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverif
 
     override fun initialize() {
         onLeftIconClick()
+
         allImage()
         clickBtn()
-
-
     }
     private fun allImage(){
         // Truy cập ViewModel từ Activity
@@ -83,16 +83,7 @@ internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverif
         mBinding.btnRetryAll.setOnClickListener {
             parentFragmentManager.addFragment(fragment = CameraFrontFragment.newInstance())
         }
-        mBinding.btnRetakeFront.setOnClickListener {
-            parentFragmentManager.addFragment(fragment = CameraFrontFragment.newInstance())
-        }
-        mBinding.btnRetakeBack.setOnClickListener {
-            parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
-        }
         mBinding.btnRetakePortrait.setOnClickListener {
-            parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
-        }
-        mBinding.btnRetakeWithPn.setOnClickListener {
             parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
         }
     }
