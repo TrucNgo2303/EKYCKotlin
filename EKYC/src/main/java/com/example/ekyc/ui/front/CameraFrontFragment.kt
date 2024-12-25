@@ -64,6 +64,9 @@ internal class CameraFrontFragment :BaseDataBindingFragment<FragmentCameraFrontB
         mBinding.btnViewGuide.setOnClickListener {
             parentFragmentManager.addFragmentWithAnimation(fragment = ViewGuideFrontFragment.newInstance())
         }
+        mBinding.btnLibrary.setOnClickListener {
+
+        }
 
     }
 
@@ -78,4 +81,5 @@ internal class CameraFrontFragment :BaseDataBindingFragment<FragmentCameraFrontB
         super.onDestroyView()
         cameraXManager.stopCamera()
     }
+
 }

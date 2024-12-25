@@ -1,13 +1,10 @@
 package com.example.ekyc.base
 
-import android.content.Context
 import android.graphics.Bitmap
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 class SDKMainViewModel: ViewModel() {
 
@@ -25,4 +22,5 @@ class SDKMainViewModel: ViewModel() {
     fun savePortraitImage(bitmap: Bitmap) {
         portraitImage.value = bitmap
     }
+
 }
