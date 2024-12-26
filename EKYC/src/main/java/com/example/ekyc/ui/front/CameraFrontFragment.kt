@@ -1,23 +1,14 @@
 package com.example.ekyc.ui.front
 
-import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.AppCompatButton
 import androidx.camera.view.PreviewView
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.ekyc.R
 import com.example.ekyc.base.BaseDataBindingFragment
 import com.example.ekyc.base.CameraXManager
 import com.example.ekyc.base.SDKMainViewModel
 import com.example.ekyc.databinding.FragmentCameraFrontBinding
-import com.example.ekyc.ui.main.EKYCMainActivity
 import com.example.ekyc.utils.extension.addFragment
 import com.example.ekyc.utils.extension.addFragmentWithAnimation
 
@@ -50,8 +41,6 @@ internal class CameraFrontFragment :BaseDataBindingFragment<FragmentCameraFrontB
             cameraXManager.takePicture { bitmap ->
 
                 viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
-
-                Toast.makeText(requireContext(),"Ảnh đã được chụp",Toast.LENGTH_SHORT).show()
                 // Lưu ảnh vào ViewModel
                 bitmap?.let {
                     viewModel.saveFrontImage(it)
@@ -63,9 +52,6 @@ internal class CameraFrontFragment :BaseDataBindingFragment<FragmentCameraFrontB
         //Click View Guide
         mBinding.btnViewGuide.setOnClickListener {
             parentFragmentManager.addFragmentWithAnimation(fragment = ViewGuideFrontFragment.newInstance())
-        }
-        mBinding.btnLibrary.setOnClickListener {
-
         }
 
     }

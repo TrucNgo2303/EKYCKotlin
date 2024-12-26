@@ -3,12 +3,6 @@ package com.example.ekyc.ui.front
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.ekyc.R
 import com.example.ekyc.api.ApiService
@@ -17,7 +11,6 @@ import com.example.ekyc.base.BaseDataBindingFragment
 import com.example.ekyc.base.SDKMainViewModel
 import com.example.ekyc.databinding.FragmentCameraConfirmBinding
 import com.example.ekyc.ui.back.CameraBackFragment
-import com.example.ekyc.ui.document.UnverifiedImageFragment
 import com.example.ekyc.utils.extension.addFragment
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -31,14 +24,14 @@ import java.util.*
 internal class CameraConfirmFrontFragment : BaseDataBindingFragment<FragmentCameraConfirmBinding, CameraConfirmFrontViewModel>() {
 
     private lateinit var viewModel: SDKMainViewModel
-
+    private lateinit var frontViewModel : CameraConfirmFrontViewModel
 
     companion object {
-
         fun newInstance() =
             CameraConfirmFrontFragment().apply {
                 arguments = Bundle()
             }
+
     }
 
     override fun layoutResId(): Int = R.layout.fragment_camera_confirm
@@ -71,8 +64,8 @@ internal class CameraConfirmFrontFragment : BaseDataBindingFragment<FragmentCame
             parentFragmentManager.addFragment(fragment = CameraFrontFragment.newInstance())
         }
         mBinding.btnContinue.setOnClickListener {
-            //parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
             callAPI()
+            parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
         }
 
 
@@ -91,15 +84,17 @@ internal class CameraConfirmFrontFragment : BaseDataBindingFragment<FragmentCame
             val byteArray = byteArrayOutputStream.toByteArray()
 
             val requestFile = byteArray.toRequestBody("image/jpeg".toMediaTypeOrNull())
-            val multipartBody = MultipartBody.Part.createFormData("image", "frontImage.jpg", requestFile)
+            val multipartBody = MultipartBody.Part.createFormData("image", "$transId.jpg", requestFile)
 
             val side = "1".toRequestBody("text/plain".toMediaTypeOrNull())
 
+            //Tạo token
+            //RetrofitClient.setToken("23a439c34423446ca30acaeb382e3212")
             // Tạo Retrofit API service
             val apiService = RetrofitClient.apiClient.create(ApiService::class.java)
 
             // Gửi yêu cầu API với các tham số bổ sung
-            apiService.uploadImage(
+            apiService.uploadImageFront(
                 multipartBody,
                 transId,
                 side
@@ -107,7 +102,16 @@ internal class CameraConfirmFrontFragment : BaseDataBindingFragment<FragmentCame
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
-                    Log.d("Api", "API Success: $response")
+                        val gwMessage = response.gw_message
+                        viewModel.responseFrontLiveData.postValue(gwMessage) // Lưu giá trị gw_message vào LiveData
+
+                        viewModel.pathImage = response.gw_body.value.path_image
+
+                        viewModel.birthday = response.gw_body.value.date_birth
+                        viewModel.docType = response.gw_body.doc_type.toString()
+                        viewModel.docNo = response.gw_body.value.drive_licence
+
+                        Log.d("Api", "API Success: $response")
                 }, { throwable ->
                     Log.d("Api", "Error: ${throwable.message}")
                 })

@@ -23,4 +23,20 @@ class SDKMainViewModel: ViewModel() {
         portraitImage.value = bitmap
     }
 
+    var pathImage: String = ""
+
+    var birthday: String = ""
+    var docType: String = ""
+    var docNo: String = ""
+    var nationality: String = ""
+    var issuanceDate: String = ""
+    var issuancePlace: String = ""
+    var expireDate: String = ""
+
+
+    val responseFrontLiveData = MutableLiveData<String>()
+    val responseBackLiveData = MutableLiveData<String>()
+
+    val responseImageLiveData = MutableLiveData<String>()
+
 }

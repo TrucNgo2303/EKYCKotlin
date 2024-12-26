@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.lifecycle.ViewModelProvider
 import com.example.ekyc.R
 import com.example.ekyc.base.BaseDataBindingFragment
 import com.example.ekyc.base.SDKMainViewModel
@@ -39,6 +40,10 @@ internal class RegisterInfoFragment : BaseDataBindingFragment<FragmentRegisterIn
 
     override fun initialize() {
         onLeftIconClick()
+        sdkViewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
+
+        info()
+
         mBinding.btnCalendar.setOnClickListener {
             showCalendarPopup(it, mBinding.tvBirthdayDay)
         }
@@ -127,6 +132,26 @@ internal class RegisterInfoFragment : BaseDataBindingFragment<FragmentRegisterIn
         calendarView.date = calendar.timeInMillis
     }
 
+
+    private fun info(){
+        mBinding.tvBirthdayDay.text = sdkViewModel.birthday
+        val docType = sdkViewModel.docType
+        if(docType == "1"){
+            mBinding.tvDocType.text = "ID"
+        }else if(docType == "2"){
+            mBinding.tvDocType.text = "Passport"
+        }else if(docType == "3"){
+            mBinding.tvDocType.text = "Driver License"
+        }
+
+
+
+        mBinding.tvDocNo.text = sdkViewModel.docNo
+        mBinding.tvNationality.text = sdkViewModel.nationality
+        mBinding.tvIssuanceDate.text = sdkViewModel.issuanceDate
+        mBinding.tvIssuancePlace.text = sdkViewModel.issuancePlace
+        mBinding.tvExpireDate.text = sdkViewModel.expireDate
+    }
 
 
 

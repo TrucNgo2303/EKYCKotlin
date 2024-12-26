@@ -54,7 +54,6 @@ internal class CameraPortraitFragment : BaseDataBindingFragment<FragmentCameraPo
 
                 viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
 
-                Toast.makeText(requireContext(),"Ảnh đã được chụp", Toast.LENGTH_SHORT).show()
                 // Lưu ảnh vào ViewModel
                 bitmap?.let {
                     viewModel.savePortraitImage(it)
