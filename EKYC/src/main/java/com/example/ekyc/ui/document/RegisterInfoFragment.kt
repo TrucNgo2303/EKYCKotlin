@@ -43,6 +43,7 @@ internal class RegisterInfoFragment : BaseDataBindingFragment<FragmentRegisterIn
         sdkViewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
 
         info()
+        allImage()
 
         mBinding.btnCalendar.setOnClickListener {
             showCalendarPopup(it, mBinding.tvBirthdayDay)
@@ -151,6 +152,34 @@ internal class RegisterInfoFragment : BaseDataBindingFragment<FragmentRegisterIn
         mBinding.tvIssuanceDate.text = sdkViewModel.issuanceDate
         mBinding.tvIssuancePlace.text = sdkViewModel.issuancePlace
         mBinding.tvExpireDate.text = sdkViewModel.expireDate
+    }
+    private fun allImage(){
+        // Lấy ảnh mặt trước căn cước
+        sdkViewModel.frontImage.observe(viewLifecycleOwner) { bitmap ->
+            // Xử lý ảnh ở đây khi LiveData thay đổi
+            if (bitmap != null) {
+                // Sử dụng bitmap ở đây
+                mBinding.imgFrontSide.setImageBitmap(bitmap)
+            }
+        }
+
+        // Lấy ảnh mặt sau căn cước
+        sdkViewModel.backImage.observe(viewLifecycleOwner) { bitmap ->
+            // Xử lý ảnh ở đây khi LiveData thay đổi
+            if (bitmap != null) {
+                // Sử dụng bitmap ở đây
+                mBinding.imgBackSide.setImageBitmap(bitmap)
+            }
+        }
+
+        // Lấy ảnh chính giữa với số điện thoại
+        sdkViewModel.portraitImage.observe(viewLifecycleOwner) { bitmap ->
+            // Xử lý ảnh ở đây khi LiveData thay đổi
+            if (bitmap != null) {
+                // Sử dụng bitmap ở đây
+                mBinding.imgWithPn.setImageBitmap(bitmap)
+            }
+        }
     }
 
 

@@ -33,10 +33,9 @@ class SDKMainViewModel: ViewModel() {
     var issuancePlace: String = ""
     var expireDate: String = ""
 
+    var gwMessFront: String = ""
+    var gwMessBack: String = ""
+    var gwMessPortrait: String = ""
 
-    val responseFrontLiveData = MutableLiveData<String>()
-    val responseBackLiveData = MutableLiveData<String>()
-
-    val responseImageLiveData = MutableLiveData<String>()
 
 }

@@ -2,6 +2,7 @@ package com.example.ekyc.ui.portrait
 
 import android.graphics.Bitmap
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.ekyc.R
 import com.example.ekyc.api.ApiService
@@ -13,6 +14,10 @@ import com.example.ekyc.ui.document.UnverifiedImageFragment
 import com.example.ekyc.utils.extension.addFragment
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -63,11 +68,22 @@ internal class CameraConfirmPortraitFragment : BaseDataBindingFragment<FragmentC
             parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
         }
         mBinding.btnContinue.setOnClickListener {
-            callAPI()
-            parentFragmentManager.addFragment(fragment = UnverifiedImageFragment.newInstance())
+//            callAPI()
+//            parentFragmentManager.addFragment(fragment = UnverifiedImageFragment.newInstance())
+            callAPI(
+                onApiSuccess = { gwMessage ->
+                    // Xử lý sau khi API thành công, ví dụ chuyển fragment
+                    parentFragmentManager.addFragment(fragment = UnverifiedImageFragment.newInstance())
+                    // Bạn có thể truy cập gwMessage tại đây
+                },
+                onApiError = { errorMessage ->
+                    // Xử lý khi có lỗi xảy ra, ví dụ: hiển thị thông báo lỗi
+                    Toast.makeText(context, "Lỗi: $errorMessage", Toast.LENGTH_SHORT).show()
+                }
+            )
         }
     }
-    private fun callAPI() {
+    private fun callAPI(onApiSuccess: (String) -> Unit, onApiError: (String) -> Unit) {
         // Lấy thời gian hiện tại
         val currentTimestamp = SimpleDateFormat("yyyyMMddHHmmssSSS", Locale.getDefault()).format(
             Date()
@@ -104,13 +120,17 @@ internal class CameraConfirmPortraitFragment : BaseDataBindingFragment<FragmentC
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
                     val gwMessage = response.gw_message
-                    viewModel.responseImageLiveData.postValue(gwMessage)
+                    viewModel.gwMessPortrait = gwMessage
+                    Log.d("Api", "API Success: ${viewModel.gwMessPortrait}")
                     Log.d("Api", "API Success: $response")
+                    onApiSuccess(gwMessage)
                 }, { throwable ->
                     Log.d("Api", "Error: ${throwable.message}")
+                    onApiError(throwable.message ?: "Unknown error")
                 })
         } ?: run {
             Log.d("Api", "Image not available")
+            onApiError("Image not available") // Gọi callback lỗi nếu không có hình ảnh
         }
     }
 }

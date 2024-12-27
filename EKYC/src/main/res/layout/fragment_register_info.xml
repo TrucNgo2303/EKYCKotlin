@@ -93,6 +93,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="16dp"
                     android:text="XX/XX/XXXX"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     />
                 <androidx.appcompat.widget.AppCompatButton
@@ -144,6 +145,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     android:layout_marginRight="16dp"
                     android:text="Passport Card"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     />
                 <View
@@ -227,6 +229,7 @@
                     android:layout_marginRight="16dp"
                     android:text="Vietnamese"
                     android:textSize="16sp"
+                    android:textColor="@color/black"
                     />
                 <View
                     android:layout_width="220dp"
@@ -267,6 +270,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     android:layout_marginRight="16dp"
                     android:text="XX/XX/XXXX"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     />
                 <androidx.appcompat.widget.AppCompatButton
@@ -359,6 +363,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     android:layout_marginRight="16dp"
                     android:text="XX/XX/XXXX"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     />
                 <androidx.appcompat.widget.AppCompatButton
@@ -411,7 +416,6 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_upload_photo_title"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintWidth_percent="0.45"
-                    android:background="@drawable/button_background_green"
                     />
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ic_good_front_side"
@@ -440,7 +444,6 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_upload_photo_title"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintWidth_percent="0.45"
-                    android:background="@drawable/button_background_green"
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="8dp"
                     />
@@ -471,7 +474,6 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_front_side"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintWidth_percent="0.45"
-                    android:background="@drawable/button_background_green"
                     android:layout_marginTop="16dp"
                     android:layout_marginLeft="8dp"
                     />
@@ -502,7 +504,6 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_back_side"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintWidth_percent="0.45"
-                    android:background="@drawable/button_background_green"
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="8dp"
                     />

@@ -16,6 +16,10 @@ import com.example.ekyc.utils.extension.addFragment
 import com.google.gson.Gson
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -68,8 +72,16 @@ internal class CameraConfirmBackFragment : BaseDataBindingFragment<FragmentCamer
             parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
         }
         mBinding.btnContinue.setOnClickListener {
-            callAPI()
-            parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
+//            callAPI()
+//            parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
+            GlobalScope.launch {
+                // Gọi API và chờ kết quả trả về
+                val response = callAPI()
+                // Sau khi nhận được kết quả, chuyển fragment
+                withContext(Dispatchers.Main) {
+                    parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
+                }
+            }
         }
     }
     private fun callAPI() {
@@ -107,8 +119,7 @@ internal class CameraConfirmBackFragment : BaseDataBindingFragment<FragmentCamer
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
                     val gwMessage = response.gw_message
-                    viewModel.responseBackLiveData.postValue(gwMessage) // Lưu giá trị gw_message vào LiveData
-
+                    viewModel.gwMessBack = gwMessage
                     viewModel.nationality = response.gw_body.value.issued_at
                     viewModel.issuanceDate = response.gw_body.value.issued_on
                     viewModel.issuancePlace = response.gw_body.value.issued_at

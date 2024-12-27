@@ -103,8 +103,8 @@ internal class CameraConfirmFrontFragment : BaseDataBindingFragment<FragmentCame
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
                         val gwMessage = response.gw_message
-                        viewModel.responseFrontLiveData.postValue(gwMessage) // Lưu giá trị gw_message vào LiveData
-
+                        //viewModel.responseFrontLiveData.postValue(gwMessage) // Lưu giá trị gw_message vào LiveData
+                        viewModel.gwMessFront = gwMessage
                         viewModel.pathImage = response.gw_body.value.path_image
 
                         viewModel.birthday = response.gw_body.value.date_birth

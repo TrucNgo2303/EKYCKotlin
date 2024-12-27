@@ -2,25 +2,16 @@ package com.example.ekyc.ui.document
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.ekyc.R
 import com.example.ekyc.base.BaseDataBindingFragment
 import com.example.ekyc.base.SDKMainViewModel
 import com.example.ekyc.databinding.FragmentUnverifiedImageBinding
-import com.example.ekyc.ui.back.CameraBackFragment
-import com.example.ekyc.ui.back.CameraConfirmBackViewModel
 import com.example.ekyc.ui.face.CameraFaceConfirmFragment
-import com.example.ekyc.ui.front.CameraConfirmFrontViewModel
 import com.example.ekyc.ui.front.CameraFrontFragment
-import com.example.ekyc.ui.portrait.CameraPortraitFragment
 import com.example.ekyc.utils.extension.addFragment
-import org.json.JSONException
-import org.json.JSONObject
 
 internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverifiedImageBinding, UnverifiedViewModel>() {
 
@@ -47,49 +38,11 @@ internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverif
 
     override fun initialize() {
         onLeftIconClick()
-
         // Truy cập ViewModel từ Activity
         sdkViewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
-
-        //Lấy response
-        sdkViewModel.responseFrontLiveData.observe(viewLifecycleOwner) { gwMessage ->
-            if(gwMessage != "Success"){
-                mBinding.icFailFrontSide.visibility = View.VISIBLE
-                mBinding.btnContinueFail.visibility = View.VISIBLE
-                mBinding.btnRetryAll.visibility = View.VISIBLE
-                mBinding.tvError.visibility = View.VISIBLE
-                mBinding.btnContinueTrue.visibility = View.GONE
-                mBinding.tvFrontSide.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
-            }else{
-                mBinding.icGoodFrontSide.visibility = View.VISIBLE
-
-            }
-        }
-        sdkViewModel.responseBackLiveData.observe(viewLifecycleOwner) { gwMessage ->
-            if(gwMessage != "Success"){
-                mBinding.icFailBackSide.visibility = View.VISIBLE
-                mBinding.btnContinueFail.visibility = View.VISIBLE
-                mBinding.btnRetryAll.visibility = View.VISIBLE
-                mBinding.tvError.visibility = View.VISIBLE
-                mBinding.btnContinueTrue.visibility = View.GONE
-                mBinding.tvBackSide.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
-            }else{
-                mBinding.icGoodBackSide.visibility = View.VISIBLE
-            }
-        }
-        sdkViewModel.responseImageLiveData.observe(viewLifecycleOwner) { gwMessage ->
-            if(gwMessage != "Success"){
-                mBinding.icFailPnSide.visibility = View.VISIBLE
-                mBinding.btnContinueFail.visibility = View.VISIBLE
-                mBinding.btnRetryAll.visibility = View.VISIBLE
-                mBinding.tvError.visibility = View.VISIBLE
-                mBinding.btnContinueTrue.visibility = View.GONE
-                mBinding.tvWithPn.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
-            }else{
-                mBinding.icGoodPnSide.visibility = View.VISIBLE
-            }
-        }
         allImage()
+        //Lấy response
+        warningImage()
         clickBtn()
     }
     private fun allImage(){
@@ -133,5 +86,46 @@ internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverif
         mBinding.btnContinueTrue.setOnClickListener {
             parentFragmentManager.addFragment(fragment = RegisterInfoFragment.newInstance())
         }
+    }
+
+    private fun warningImage(){
+        var gwMessFront = sdkViewModel.gwMessFront
+        var gwMessBack = sdkViewModel.gwMessBack
+        var gwMessPortrait = sdkViewModel.gwMessPortrait
+
+        val isAnyFailed = gwMessFront.trim() != "Success" ||
+                gwMessBack.trim() != "Success" ||
+                gwMessPortrait.trim() != "Success"
+
+        if (isAnyFailed) {
+            // Nếu một trong ba giá trị không phải "Success"
+            mBinding.icFailFrontSide.visibility = if (gwMessFront.trim() != "Success") View.VISIBLE else View.GONE
+            mBinding.icFailBackSide.visibility = if (gwMessBack.trim() != "Success") View.VISIBLE else View.GONE
+            mBinding.icFailPnSide.visibility = if (gwMessPortrait.trim() != "Success") View.VISIBLE else View.GONE
+
+            mBinding.btnContinueFail.visibility = View.VISIBLE
+            mBinding.btnRetryAll.visibility = View.VISIBLE
+            mBinding.tvError.visibility = View.VISIBLE
+            mBinding.btnContinueTrue.visibility = View.GONE
+
+            mBinding.tvFrontSide.setTextColor(ContextCompat.getColor(requireContext(), if (gwMessFront.trim() != "Success") R.color.red else R.color.green))
+            mBinding.tvBackSide.setTextColor(ContextCompat.getColor(requireContext(), if (gwMessBack.trim() != "Success") R.color.red else R.color.green))
+            mBinding.tvWithPn.setTextColor(ContextCompat.getColor(requireContext(), if (gwMessPortrait.trim() != "Success") R.color.red else R.color.green))
+        } else {
+            // Nếu tất cả đều là "Success"
+            mBinding.icGoodFrontSide.visibility = View.VISIBLE
+            mBinding.icGoodBackSide.visibility = View.VISIBLE
+            mBinding.icGoodPnSide.visibility = View.VISIBLE
+
+            mBinding.btnContinueFail.visibility = View.GONE
+            mBinding.btnRetryAll.visibility = View.GONE
+            mBinding.tvError.visibility = View.GONE
+            mBinding.btnContinueTrue.visibility = View.VISIBLE
+
+            mBinding.tvFrontSide.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+            mBinding.tvBackSide.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+            mBinding.tvWithPn.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+        }
+
     }
 }
