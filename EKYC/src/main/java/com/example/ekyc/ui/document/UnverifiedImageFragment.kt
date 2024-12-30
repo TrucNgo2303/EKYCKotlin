@@ -63,8 +63,16 @@ internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverif
             mBinding.imgBackSide.setImageBitmap(bitmap)
         }
 
+        sdkViewModel.faceImage?.let { bitmap ->
+            mBinding.imgPortrait.setImageBitmap(bitmap)
+        }
+
         sdkViewModel.portraitImage?.let { bitmap ->
             mBinding.imgWithPn.setImageBitmap(bitmap)
+        }
+
+        sdkViewModel.faceImage?.let { bitmap ->
+            mBinding.imgPortrait.setImageBitmap(bitmap)
         }
 
     }
@@ -87,16 +95,20 @@ internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverif
         var gwMessFront = sdkViewModel.gwMessFront
         var gwMessBack = sdkViewModel.gwMessBack
         var gwMessPortrait = sdkViewModel.gwMessPortrait
+        var gwMessFace = sdkViewModel.gwMessFace
 
         val isAnyFailed = gwMessFront.trim() != "Success" ||
                 gwMessBack.trim() != "Success" ||
-                gwMessPortrait.trim() != "Success"
+                gwMessPortrait.trim() != "Success" ||
+                gwMessFace.trim() != "Success"
 
         if (isAnyFailed) {
             // Nếu một trong ba giá trị không phải "Success"
             mBinding.icFailFrontSide.visibility = if (gwMessFront.trim() != "Success") View.VISIBLE else View.GONE
             mBinding.icFailBackSide.visibility = if (gwMessBack.trim() != "Success") View.VISIBLE else View.GONE
             mBinding.icFailPnSide.visibility = if (gwMessPortrait.trim() != "Success") View.VISIBLE else View.GONE
+            mBinding.icFailPortraitSide.visibility = if (gwMessFace.trim() != "Success") View.VISIBLE else View.GONE
+
 
             mBinding.btnContinueFail.visibility = View.VISIBLE
             mBinding.btnRetryAll.visibility = View.VISIBLE
@@ -106,6 +118,10 @@ internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverif
             mBinding.tvFrontSide.setTextColor(ContextCompat.getColor(requireContext(), if (gwMessFront.trim() != "Success") R.color.red else R.color.green))
             mBinding.tvBackSide.setTextColor(ContextCompat.getColor(requireContext(), if (gwMessBack.trim() != "Success") R.color.red else R.color.green))
             mBinding.tvWithPn.setTextColor(ContextCompat.getColor(requireContext(), if (gwMessPortrait.trim() != "Success") R.color.red else R.color.green))
+            mBinding.tvPortrait.setTextColor(ContextCompat.getColor(requireContext(), if (gwMessFace.trim() != "Success") R.color.red else R.color.green))
+
+            mBinding.btnRetakePortrait.visibility = if(gwMessFace.trim() != "Success") View.VISIBLE else View.GONE
+
         } else {
             // Nếu tất cả đều là "Success"
             mBinding.icGoodFrontSide.visibility = View.VISIBLE

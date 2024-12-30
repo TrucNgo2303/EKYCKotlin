@@ -61,23 +61,13 @@ internal class CameraConfirmFrontFragment : BaseDataBindingFragment<FragmentCame
             parentFragmentManager.addFragment(fragment = CameraFrontFragment.newInstance())
         }
         mBinding.btnContinue.setOnClickListener {
-            callAPI(
-                    onApiSuccess = { gwMessage ->
-                        // Xử lý sau khi API thành công, ví dụ chuyển fragment
-                        parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
-                        // Bạn có thể truy cập gwMessage tại đây
-                    },
-                    onApiError = { errorMessage ->
-                        // Xử lý khi có lỗi xảy ra, ví dụ: hiển thị thông báo lỗi
-                        Toast.makeText(context, "Lỗi: $errorMessage", Toast.LENGTH_SHORT).show()
-                    }
-            )
-            //parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
+            callAPI()
+            parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
         }
 
 
     }
-    private fun callAPI(onApiSuccess: (String) -> Unit, onApiError: (String) -> Unit) {
+    private fun callAPI() {
         // Lấy thời gian hiện tại
         val currentTimestamp = SimpleDateFormat("yyyyMMddHHmmssSSS", Locale.getDefault()).format(Date())
 
@@ -109,10 +99,8 @@ internal class CameraConfirmFrontFragment : BaseDataBindingFragment<FragmentCame
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
-                        val gwMessage = response.gw_message
-                        //viewModel.responseFrontLiveData.postValue(gwMessage) // Lưu giá trị gw_message vào LiveData
+                        val gwMessage = response.gw_message 
                         viewModel.gwMessFront = gwMessage
-                        //viewModel.pathImage = response.gw_body.value.path_image
 
                         // Kiểm tra gw_body và gw_body.value trước khi truy cập
                         val pathImage = response.gw_body?.value?.path_image
@@ -127,10 +115,8 @@ internal class CameraConfirmFrontFragment : BaseDataBindingFragment<FragmentCame
                         viewModel.docNo = response.gw_body.value.drive_licence
 
                         Log.d("Api", "API Success: $response")
-                        onApiSuccess(gwMessage)
                 }, { throwable ->
                     Log.d("Api", "Error: ${throwable.message}")
-                    onApiError(throwable.message ?: "Unknown error")
                 })
         } ?: run {
             Log.d("Api", "Image not available")

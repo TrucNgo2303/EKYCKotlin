@@ -11,7 +11,7 @@ class SDKMainViewModel: ViewModel() {
     var frontImage: Bitmap? = null
     var backImage: Bitmap? = null
     var portraitImage: Bitmap? = null
-
+    var faceImage: Bitmap? = null
 
 
     var pathImage: String = ""
@@ -27,6 +27,6 @@ class SDKMainViewModel: ViewModel() {
     var gwMessFront: String = ""
     var gwMessBack: String = ""
     var gwMessPortrait: String = ""
-
+    var gwMessFace: String = ""
 
 }

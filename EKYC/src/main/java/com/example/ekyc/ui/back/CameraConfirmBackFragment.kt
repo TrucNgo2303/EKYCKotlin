@@ -31,7 +31,6 @@ import java.util.*
 internal class CameraConfirmBackFragment : BaseDataBindingFragment<FragmentCameraConfirmBackBinding, CameraConfirmBackViewModel>() {
 
     private lateinit var viewModel : SDKMainViewModel
-    private lateinit var backViewModel: CameraConfirmBackViewModel
 
     companion object {
 
@@ -68,29 +67,12 @@ internal class CameraConfirmBackFragment : BaseDataBindingFragment<FragmentCamer
             parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
         }
         mBinding.btnContinue.setOnClickListener {
-            callAPI(
-                onApiSuccess = { gwMessage ->
-                    // Xử lý sau khi API thành công, ví dụ chuyển fragment
-                    parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
-                    // Bạn có thể truy cập gwMessage tại đây
-                },
-                onApiError = { errorMessage ->
-                    // Xử lý khi có lỗi xảy ra, ví dụ: hiển thị thông báo lỗi
-                    Toast.makeText(context, "Lỗi: $errorMessage", Toast.LENGTH_SHORT).show()
-                }
-            )
-//            parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
-//            GlobalScope.launch {
-//                // Gọi API và chờ kết quả trả về
-//                val response = callAPI()
-//                // Sau khi nhận được kết quả, chuyển fragment
-//                withContext(Dispatchers.Main) {
-//                    parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
-//                }
-//            }
+            callAPI()
+            parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
+
         }
     }
-    private fun callAPI(onApiSuccess: (String) -> Unit, onApiError: (String) -> Unit) {
+    private fun callAPI() {
         // Lấy thời gian hiện tại
         val currentTimestamp = SimpleDateFormat("yyyyMMddHHmmssSSS", Locale.getDefault()).format(
             Date()
@@ -113,8 +95,6 @@ internal class CameraConfirmBackFragment : BaseDataBindingFragment<FragmentCamer
             // Tạo Retrofit API service
             val apiService = RetrofitClient.apiClient.create(ApiService::class.java)
 
-            backViewModel = ViewModelProvider(requireActivity())[CameraConfirmBackViewModel::class.java]
-
             // Gửi yêu cầu API với các tham số bổ sung
             apiService.uploadImageBack(
                 multipartBody,
@@ -132,12 +112,8 @@ internal class CameraConfirmBackFragment : BaseDataBindingFragment<FragmentCamer
                     viewModel.expireDate = response.gw_body.value.license.B
 
                     Log.d("Api", "API Success: $response")
-//                    viewModel.responseBackLiveData.postValue(response.toString())
-//                    Log.d("Api", "API Success: $response")
-                    onApiSuccess(gwMessage)
                 }, { throwable ->
                     Log.d("Api", "Error: ${throwable.message}")
-                    onApiError(throwable.message ?: "Unknown error")
                 })
         } ?: run {
             Log.d("Api", "Image not available")
