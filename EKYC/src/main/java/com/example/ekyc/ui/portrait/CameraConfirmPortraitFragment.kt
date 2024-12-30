@@ -56,13 +56,8 @@ internal class CameraConfirmPortraitFragment : BaseDataBindingFragment<FragmentC
         // Truy cập ViewModel từ Activity
         viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
 
-        // Lắng nghe thay đổi trong LiveData và xử lý ảnh khi có sự thay đổi
-        viewModel.portraitImage.observe(viewLifecycleOwner) { bitmap ->
-            // Xử lý ảnh ở đây khi LiveData thay đổi
-            if (bitmap != null) {
-                // Sử dụng bitmap ở đây
-                mBinding.ivCard.setImageBitmap(bitmap)
-            }
+        viewModel.portraitImage?.let { bitmap ->
+            mBinding.ivCard.setImageBitmap(bitmap)
         }
         mBinding.btnRetake.setOnClickListener {
             parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
@@ -92,7 +87,7 @@ internal class CameraConfirmPortraitFragment : BaseDataBindingFragment<FragmentC
         val transId = currentTimestamp.toRequestBody("text/plain".toMediaTypeOrNull())
 
         // Tiến hành gọi API với transId
-        viewModel.portraitImage.value?.let { bitmap ->
+        viewModel.portraitImage?.let { bitmap ->
             val byteArrayOutputStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
             val byteArray = byteArrayOutputStream.toByteArray()

@@ -3,6 +3,7 @@ package com.example.ekyc.ui.back
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.ekyc.R
 import com.example.ekyc.api.ApiService
@@ -58,13 +59,8 @@ internal class CameraConfirmBackFragment : BaseDataBindingFragment<FragmentCamer
         // Truy cập ViewModel từ Activity
         viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
 
-        // Lắng nghe thay đổi trong LiveData và xử lý ảnh khi có sự thay đổi
-        viewModel.backImage.observe(viewLifecycleOwner) { bitmap ->
-            // Xử lý ảnh ở đây khi LiveData thay đổi
-            if (bitmap != null) {
-                // Sử dụng bitmap ở đây
-                mBinding.ivCard.setImageBitmap(bitmap)
-            }
+        viewModel.backImage?.let { bitmap ->
+            mBinding.ivCard.setImageBitmap(bitmap)
         }
 
 
@@ -72,19 +68,29 @@ internal class CameraConfirmBackFragment : BaseDataBindingFragment<FragmentCamer
             parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
         }
         mBinding.btnContinue.setOnClickListener {
-//            callAPI()
-//            parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
-            GlobalScope.launch {
-                // Gọi API và chờ kết quả trả về
-                val response = callAPI()
-                // Sau khi nhận được kết quả, chuyển fragment
-                withContext(Dispatchers.Main) {
+            callAPI(
+                onApiSuccess = { gwMessage ->
+                    // Xử lý sau khi API thành công, ví dụ chuyển fragment
                     parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
+                    // Bạn có thể truy cập gwMessage tại đây
+                },
+                onApiError = { errorMessage ->
+                    // Xử lý khi có lỗi xảy ra, ví dụ: hiển thị thông báo lỗi
+                    Toast.makeText(context, "Lỗi: $errorMessage", Toast.LENGTH_SHORT).show()
                 }
-            }
+            )
+//            parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
+//            GlobalScope.launch {
+//                // Gọi API và chờ kết quả trả về
+//                val response = callAPI()
+//                // Sau khi nhận được kết quả, chuyển fragment
+//                withContext(Dispatchers.Main) {
+//                    parentFragmentManager.addFragment(fragment = CameraPortraitFragment.newInstance())
+//                }
+//            }
         }
     }
-    private fun callAPI() {
+    private fun callAPI(onApiSuccess: (String) -> Unit, onApiError: (String) -> Unit) {
         // Lấy thời gian hiện tại
         val currentTimestamp = SimpleDateFormat("yyyyMMddHHmmssSSS", Locale.getDefault()).format(
             Date()
@@ -94,7 +100,7 @@ internal class CameraConfirmBackFragment : BaseDataBindingFragment<FragmentCamer
         val transId = currentTimestamp.toRequestBody("text/plain".toMediaTypeOrNull())
 
         // Tiến hành gọi API với transId
-        viewModel.backImage.value?.let { bitmap ->
+        viewModel.backImage?.let { bitmap ->
             val byteArrayOutputStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
             val byteArray = byteArrayOutputStream.toByteArray()
@@ -128,11 +134,14 @@ internal class CameraConfirmBackFragment : BaseDataBindingFragment<FragmentCamer
                     Log.d("Api", "API Success: $response")
 //                    viewModel.responseBackLiveData.postValue(response.toString())
 //                    Log.d("Api", "API Success: $response")
+                    onApiSuccess(gwMessage)
                 }, { throwable ->
                     Log.d("Api", "Error: ${throwable.message}")
+                    onApiError(throwable.message ?: "Unknown error")
                 })
         } ?: run {
             Log.d("Api", "Image not available")
+
         }
     }
 

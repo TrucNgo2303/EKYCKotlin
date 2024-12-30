@@ -1,7 +1,7 @@
 package com.example.ekyc.ui.front
 
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
 import androidx.camera.view.PreviewView
 import androidx.lifecycle.ViewModelProvider
 import com.example.ekyc.R
@@ -17,7 +17,6 @@ internal class CameraFrontFragment :BaseDataBindingFragment<FragmentCameraFrontB
     lateinit var cameraXManager: CameraXManager
     lateinit var viewModel: SDKMainViewModel
     lateinit var preview: PreviewView
-
 
     override fun layoutResId(): Int = R.layout.fragment_camera_front
     override fun onBackFragmentPressed() {
@@ -39,14 +38,16 @@ internal class CameraFrontFragment :BaseDataBindingFragment<FragmentCameraFrontB
 
         mBinding.btnCamera.setOnClickListener {
             cameraXManager.takePicture { bitmap ->
-
                 viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
-                // Lưu ảnh vào ViewModel
-                bitmap?.let {
-                    viewModel.saveFrontImage(it)
+                bitmap?.let { capturedBitmap ->
+                    viewModel.frontImage = capturedBitmap
+                    Log.d("Bitmap", "Bitmap saved successfully: ${viewModel.frontImage}")
+
+                    // Chuyển đến fragment xác nhận sau khi lưu ảnh thành công
+                    parentFragmentManager.addFragment(fragment = CameraConfirmFrontFragment.newInstance())
                 }
+
             }
-            parentFragmentManager.addFragment(fragment = CameraConfirmFrontFragment.newInstance())
         }
 
         //Click View Guide
@@ -67,5 +68,6 @@ internal class CameraFrontFragment :BaseDataBindingFragment<FragmentCameraFrontB
         super.onDestroyView()
         cameraXManager.stopCamera()
     }
+
 
 }

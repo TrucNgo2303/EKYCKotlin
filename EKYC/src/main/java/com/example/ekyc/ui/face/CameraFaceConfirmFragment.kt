@@ -3,6 +3,8 @@ package com.example.ekyc.ui.face
 import android.content.res.Resources
 import android.graphics.RectF
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,10 +16,12 @@ import com.example.ekyc.R
 import com.example.ekyc.base.BaseDataBindingFragment
 import com.example.ekyc.base.CameraXManager
 import com.example.ekyc.databinding.FragmentCameraFaceConfirmBinding
+import kotlin.math.abs
 
 
 internal class CameraFaceConfirmFragment : BaseDataBindingFragment<FragmentCameraFaceConfirmBinding, FaceConfirmViewModel>() {
 
+    private var isFaceDetected = false
     lateinit var cameraXManager: CameraXManager
     lateinit var preview : PreviewView
 
@@ -49,43 +53,93 @@ internal class CameraFaceConfirmFragment : BaseDataBindingFragment<FragmentCamer
 
         // Set up face detection callback
         cameraXManager.processFaceDetect = { face, boundingBox ->
+//            Log.d("handleFaceDetected", "handleFaceDetected")
+//            handleFaceDetected(face, boundingBox)
             Log.d("handleFaceDetected", "handleFaceDetected")
-            handleFaceDetected(face, boundingBox)
-        }
-    }
-    private fun handleFaceDetected(face: com.google.mlkit.vision.face.Face, boundingBox: RectF) {
-        val eulerAngleX = face.headEulerAngleX  // Góc quay theo trục X
-        val eulerAngleY = face.headEulerAngleY  // Góc quay theo trục Y
 
-        // Log thông tin khuôn mặt
-        Log.d("CameraFragment", "Detected face at: $boundingBox")
+            // Kiểm tra nếu khuôn mặt chưa được xử lý
+            if (!isFaceDetected) {
+                isFaceDetected = true  // Đánh dấu rằng khuôn mặt đã được xử lý
+                handleFaceDetected(face, boundingBox)
 
-        // Kiểm tra vị trí của mặt
-        if(isFaceCentered(eulerAngleX,eulerAngleY,boundingBox)){
-            mBinding.tvTextTop.text = getString(R.string.face_straight)
-            mBinding.vCircle1.visibility = View.VISIBLE
-            if(isFaceOnLeft(eulerAngleX,eulerAngleY,boundingBox)){
-                mBinding.vCircle2.visibility = View.VISIBLE
-                mBinding.tvTextTop.text = getString(R.string.left_face)
-                if(isFaceOnRight(eulerAngleX,eulerAngleY,boundingBox)){
-                    mBinding.vCircle3.visibility = View.VISIBLE
-                    mBinding.tvTextTop.text = getString(R.string.right_face)
-                }else{
-                    Toast.makeText(requireContext(),"Khuôn mặt đang không ở bên phải, yêu cầu quét lại",Toast.LENGTH_SHORT).show()
-                }
-            }else{
-                Toast.makeText(requireContext(),"Khuôn mặt đang không ở bên trái, yêu cầu quét lại",Toast.LENGTH_SHORT).show()
+                // Đặt lại flag sau một khoảng thời gian (ví dụ: 1 giây)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    isFaceDetected = false
+                }, 10000)
             }
-        }else{
-            Toast.makeText(requireContext(),"Khuôn mặt đang không ở giữa, yêu cầu quét lại",Toast.LENGTH_SHORT).show()
+        }
+    }
+        private fun handleFaceDetected(face: com.google.mlkit.vision.face.Face, boundingBox: RectF) {
+            val eulerAngleX = face.headEulerAngleX  // Góc quay theo trục X
+            val eulerAngleY = face.headEulerAngleY  // Góc quay theo trục Y
+
+            // Kiểm tra nếu khuôn mặt ở giữa
+            if (handleFaceCenter(eulerAngleX, eulerAngleY, boundingBox)) {
+                // Nếu khuôn mặt đã ở giữa, kiểm tra tiếp khuôn mặt bên trái
+                if (handleFaceLeft(eulerAngleX, eulerAngleY, boundingBox)) {
+                    // Nếu khuôn mặt ở bên trái, kiểm tra tiếp khuôn mặt bên phải
+                    handleFaceRight(eulerAngleX, eulerAngleY, boundingBox)
+                }
+            }
         }
 
+    // Hàm kiểm tra nếu khuôn mặt ở giữa
+    private fun handleFaceCenter(eulerAngleX: Float, eulerAngleY: Float, boundingBox: RectF): Boolean {
+        if (isFaceCentered(eulerAngleX, eulerAngleY, boundingBox)) {
+            mBinding.tvTextTop.text = getString(R.string.left_face)
+            mBinding.vCircle1.visibility = View.VISIBLE
+            Log.d("CameraFragment", "Face centered at: $boundingBox")
+            return true
+        } else {
+            Toast.makeText(requireContext(), "Khuôn mặt đang không ở giữa, yêu cầu quét lại", Toast.LENGTH_SHORT).show()
 
+            // Đợi 1 giây và thử lại mà không dừng camera
+            Handler(Looper.getMainLooper()).postDelayed({
+                handleFaceCenter(eulerAngleX, eulerAngleY, boundingBox)
+            }, 1000) // Delay 1 giây
+        }
+        return false
     }
+
+    // Hàm kiểm tra nếu khuôn mặt ở bên trái
+    private fun handleFaceLeft(eulerAngleX: Float, eulerAngleY: Float, boundingBox: RectF): Boolean {
+        if (isFaceOnLeft(eulerAngleX, eulerAngleY, boundingBox)) {
+            mBinding.vCircle2.visibility = View.VISIBLE
+            mBinding.tvTextTop.text = getString(R.string.right_face)
+            Log.d("CameraFragment", "Face on left at: $boundingBox")
+            return true
+        } else {
+            Toast.makeText(requireContext(), "Khuôn mặt đang không ở bên trái, yêu cầu quét lại", Toast.LENGTH_SHORT).show()
+
+            // Đợi 1 giây và thử lại mà không dừng camera
+            Handler(Looper.getMainLooper()).postDelayed({
+                handleFaceLeft(eulerAngleX, eulerAngleY, boundingBox)
+            }, 1000) // Delay 1 giây
+        }
+        return false
+    }
+
+    // Hàm kiểm tra nếu khuôn mặt ở bên phải
+    private fun handleFaceRight(eulerAngleX: Float, eulerAngleY: Float, boundingBox: RectF): Boolean {
+        if (isFaceOnRight(eulerAngleX, eulerAngleY, boundingBox)) {
+            mBinding.vCircle3.visibility = View.VISIBLE
+            mBinding.tvTextTop.text = getString(R.string.right_face)
+            Log.d("CameraFragment", "Face on right at: $boundingBox")
+            return true
+        } else {
+            Toast.makeText(requireContext(), "Khuôn mặt đang không ở bên phải, yêu cầu quét lại", Toast.LENGTH_SHORT).show()
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                handleFaceRight(eulerAngleX, eulerAngleY, boundingBox)
+            }, 1000) // Delay 1 giây
+        }
+        return false
+    }
+
 
     private fun isFaceCentered(eulerAngleX: Float, eulerAngleY: Float, boundingBox: RectF): Boolean {
-        val angleThreshold = 10  // Ngưỡng góc quay
-        val centerThreshold = 0.2f  // Ngưỡng tỷ lệ khuôn mặt ở giữa màn hình
+        val angleThreshold = 10
+        val centerThreshold = 0.3f
 
         // Kiểm tra góc quay và vị trí mặt
         val screenWidth = Resources.getSystem().displayMetrics.widthPixels
@@ -93,16 +147,17 @@ internal class CameraFaceConfirmFragment : BaseDataBindingFragment<FragmentCamer
         val faceCenterX = (boundingBox.left + boundingBox.right) / 2
         val faceCenterY = (boundingBox.top + boundingBox.bottom) / 2
 
-        val isCenteredByAngles = Math.abs(eulerAngleX) < angleThreshold && Math.abs(eulerAngleY) < angleThreshold
-        val isCenteredByPosition = Math.abs(faceCenterX - screenWidth / 2) < screenWidth * centerThreshold &&
-                Math.abs(faceCenterY - screenHeight / 2) < screenHeight * centerThreshold
+        val isCenteredByAngles = abs(eulerAngleX) < angleThreshold && abs(eulerAngleY) < angleThreshold
+        val isCenteredByPosition = abs(faceCenterX - screenWidth / 2) < screenWidth * centerThreshold &&
+                abs(faceCenterY - screenHeight / 2) < screenHeight * centerThreshold
 
         return isCenteredByAngles && isCenteredByPosition
     }
 
+
     private fun isFaceOnLeft(eulerAngleX: Float, eulerAngleY: Float, boundingBox: RectF): Boolean {
-        val angleThreshold = 10  // Ngưỡng góc quay
-        val leftThreshold = 0.2f  // Ngưỡng tỷ lệ khuôn mặt bên trái màn hình
+        val angleThreshold = 10
+        val leftThreshold = 0.3f
 
         // Kiểm tra góc quay và vị trí mặt bên trái
         val screenWidth = Resources.getSystem().displayMetrics.widthPixels
@@ -115,8 +170,8 @@ internal class CameraFaceConfirmFragment : BaseDataBindingFragment<FragmentCamer
     }
 
     private fun isFaceOnRight(eulerAngleX: Float, eulerAngleY: Float, boundingBox: RectF): Boolean {
-        val angleThreshold = 10  // Ngưỡng góc quay
-        val rightThreshold = 0.2f  // Ngưỡng tỷ lệ khuôn mặt bên phải màn hình
+        val angleThreshold = 10
+        val rightThreshold = 0.3f
 
         // Kiểm tra góc quay và vị trí mặt bên phải
         val screenWidth = Resources.getSystem().displayMetrics.widthPixels

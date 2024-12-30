@@ -1,6 +1,7 @@
 package com.example.ekyc.ui.portrait
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -53,13 +54,15 @@ internal class CameraPortraitFragment : BaseDataBindingFragment<FragmentCameraPo
             cameraXManager.takePicture { bitmap ->
 
                 viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
+                bitmap?.let { capturedBitmap ->
+                    viewModel.portraitImage = capturedBitmap
+                    Log.d("Bitmap", "Bitmap saved successfully: ${viewModel.frontImage}")
 
-                // Lưu ảnh vào ViewModel
-                bitmap?.let {
-                    viewModel.savePortraitImage(it)
+                    // Chuyển đến fragment xác nhận sau khi lưu ảnh thành công
+                    parentFragmentManager.addFragment(fragment = CameraConfirmPortraitFragment.newInstance())
                 }
+
             }
-            parentFragmentManager.addFragment(fragment = CameraConfirmPortraitFragment.newInstance())
         }
 
         //Click View Guide

@@ -1,6 +1,7 @@
 package com.example.ekyc.ui.back
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.example.ekyc.base.BaseDataBindingFragment
 import com.example.ekyc.base.CameraXManager
 import com.example.ekyc.base.SDKMainViewModel
 import com.example.ekyc.databinding.FragmentCameraBackBinding
+import com.example.ekyc.ui.front.CameraConfirmFrontFragment
 import com.example.ekyc.utils.extension.addFragment
 
 
@@ -57,11 +59,16 @@ internal class CameraBackFragment : BaseDataBindingFragment<FragmentCameraBackBi
         mBinding.btnCamera.setOnClickListener {
             cameraXManager.takePicture { bitmap ->
 
-                viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
+                cameraXManager.takePicture { bitmap ->
+                    viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
+                    bitmap?.let { capturedBitmap ->
+                        viewModel.backImage = capturedBitmap
+                        Log.d("Bitmap", "Bitmap saved successfully: ${viewModel.frontImage}")
 
-                // Lưu ảnh vào ViewModel
-                bitmap?.let {
-                    viewModel.saveBackImage(it)
+                        // Chuyển đến fragment xác nhận sau khi lưu ảnh thành công
+                        parentFragmentManager.addFragment(fragment = CameraConfirmBackFragment.newInstance())
+                    }
+
                 }
             }
             parentFragmentManager.addFragment(fragment = CameraConfirmBackFragment.newInstance())

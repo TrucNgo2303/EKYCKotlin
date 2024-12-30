@@ -3,6 +3,7 @@ package com.example.ekyc.ui.front
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.ekyc.R
 import com.example.ekyc.api.ApiService
@@ -11,6 +12,7 @@ import com.example.ekyc.base.BaseDataBindingFragment
 import com.example.ekyc.base.SDKMainViewModel
 import com.example.ekyc.databinding.FragmentCameraConfirmBinding
 import com.example.ekyc.ui.back.CameraBackFragment
+import com.example.ekyc.ui.document.UnverifiedImageFragment
 import com.example.ekyc.utils.extension.addFragment
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -52,25 +54,30 @@ internal class CameraConfirmFrontFragment : BaseDataBindingFragment<FragmentCame
         // Truy cập ViewModel từ Activity
         viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
 
-        // Lắng nghe thay đổi trong LiveData và xử lý ảnh khi có sự thay đổi
-        viewModel.frontImage.observe(viewLifecycleOwner) { bitmap ->
-            // Xử lý ảnh ở đây khi LiveData thay đổi
-            if (bitmap != null) {
-                // Sử dụng bitmap ở đây
-                mBinding.ivCard.setImageBitmap(bitmap)
-            }
+        viewModel.frontImage?.let { bitmap ->
+            mBinding.ivCard.setImageBitmap(bitmap)
         }
         mBinding.btnRetake.setOnClickListener {
             parentFragmentManager.addFragment(fragment = CameraFrontFragment.newInstance())
         }
         mBinding.btnContinue.setOnClickListener {
-            callAPI()
-            parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
+            callAPI(
+                    onApiSuccess = { gwMessage ->
+                        // Xử lý sau khi API thành công, ví dụ chuyển fragment
+                        parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
+                        // Bạn có thể truy cập gwMessage tại đây
+                    },
+                    onApiError = { errorMessage ->
+                        // Xử lý khi có lỗi xảy ra, ví dụ: hiển thị thông báo lỗi
+                        Toast.makeText(context, "Lỗi: $errorMessage", Toast.LENGTH_SHORT).show()
+                    }
+            )
+            //parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
         }
 
 
     }
-    private fun callAPI() {
+    private fun callAPI(onApiSuccess: (String) -> Unit, onApiError: (String) -> Unit) {
         // Lấy thời gian hiện tại
         val currentTimestamp = SimpleDateFormat("yyyyMMddHHmmssSSS", Locale.getDefault()).format(Date())
 
@@ -78,7 +85,7 @@ internal class CameraConfirmFrontFragment : BaseDataBindingFragment<FragmentCame
         val transId = currentTimestamp.toRequestBody("text/plain".toMediaTypeOrNull())
 
         // Tiến hành gọi API với transId
-        viewModel.frontImage.value?.let { bitmap ->
+        viewModel.frontImage?.let { bitmap ->
             val byteArrayOutputStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
             val byteArray = byteArrayOutputStream.toByteArray()
@@ -105,15 +112,25 @@ internal class CameraConfirmFrontFragment : BaseDataBindingFragment<FragmentCame
                         val gwMessage = response.gw_message
                         //viewModel.responseFrontLiveData.postValue(gwMessage) // Lưu giá trị gw_message vào LiveData
                         viewModel.gwMessFront = gwMessage
-                        viewModel.pathImage = response.gw_body.value.path_image
+                        //viewModel.pathImage = response.gw_body.value.path_image
+
+                        // Kiểm tra gw_body và gw_body.value trước khi truy cập
+                        val pathImage = response.gw_body?.value?.path_image
+                        if (pathImage != null) {
+                            viewModel.pathImage = pathImage
+                        } else {
+                            Log.d("Api", "Path image is null")
+                        }
 
                         viewModel.birthday = response.gw_body.value.date_birth
                         viewModel.docType = response.gw_body.doc_type.toString()
                         viewModel.docNo = response.gw_body.value.drive_licence
 
                         Log.d("Api", "API Success: $response")
+                        onApiSuccess(gwMessage)
                 }, { throwable ->
                     Log.d("Api", "Error: ${throwable.message}")
+                    onApiError(throwable.message ?: "Unknown error")
                 })
         } ?: run {
             Log.d("Api", "Image not available")

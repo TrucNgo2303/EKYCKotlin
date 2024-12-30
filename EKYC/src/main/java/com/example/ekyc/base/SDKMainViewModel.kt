@@ -8,30 +8,21 @@ import okhttp3.RequestBody
 
 class SDKMainViewModel: ViewModel() {
 
-    //val frontImage: Bitmap? = null
-    val frontImage: MutableLiveData<Bitmap?> = MutableLiveData(null)
-    val backImage: MutableLiveData<Bitmap?> = MutableLiveData(null)
-    val portraitImage: MutableLiveData<Bitmap?> = MutableLiveData(null)
+    var frontImage: Bitmap? = null
+    var backImage: Bitmap? = null
+    var portraitImage: Bitmap? = null
 
-    fun saveFrontImage(bitmap: Bitmap) {
-        frontImage.value = bitmap
-    }
-    fun saveBackImage(bitmap: Bitmap) {
-        backImage.value = bitmap
-    }
-    fun savePortraitImage(bitmap: Bitmap) {
-        portraitImage.value = bitmap
-    }
+
 
     var pathImage: String = ""
 
-    var birthday: String = ""
-    var docType: String = ""
-    var docNo: String = ""
-    var nationality: String = ""
-    var issuanceDate: String = ""
-    var issuancePlace: String = ""
-    var expireDate: String = ""
+    var birthday: String? = null
+    var docType: String? = null
+    var docNo: String? = null
+    var nationality: String? = null
+    var issuanceDate: String? = null
+    var issuancePlace: String? = null
+    var expireDate: String? = null
 
     var gwMessFront: String = ""
     var gwMessBack: String = ""

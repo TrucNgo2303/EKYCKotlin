@@ -154,31 +154,15 @@ internal class RegisterInfoFragment : BaseDataBindingFragment<FragmentRegisterIn
         mBinding.tvExpireDate.text = sdkViewModel.expireDate
     }
     private fun allImage(){
-        // Lấy ảnh mặt trước căn cước
-        sdkViewModel.frontImage.observe(viewLifecycleOwner) { bitmap ->
-            // Xử lý ảnh ở đây khi LiveData thay đổi
-            if (bitmap != null) {
-                // Sử dụng bitmap ở đây
-                mBinding.imgFrontSide.setImageBitmap(bitmap)
-            }
+        sdkViewModel.frontImage?.let { bitmap ->
+            mBinding.imgFrontSide.setImageBitmap(bitmap)
+        }
+        sdkViewModel.backImage?.let { bitmap ->
+            mBinding.imgBackSide.setImageBitmap(bitmap)
         }
 
-        // Lấy ảnh mặt sau căn cước
-        sdkViewModel.backImage.observe(viewLifecycleOwner) { bitmap ->
-            // Xử lý ảnh ở đây khi LiveData thay đổi
-            if (bitmap != null) {
-                // Sử dụng bitmap ở đây
-                mBinding.imgBackSide.setImageBitmap(bitmap)
-            }
-        }
-
-        // Lấy ảnh chính giữa với số điện thoại
-        sdkViewModel.portraitImage.observe(viewLifecycleOwner) { bitmap ->
-            // Xử lý ảnh ở đây khi LiveData thay đổi
-            if (bitmap != null) {
-                // Sử dụng bitmap ở đây
-                mBinding.imgWithPn.setImageBitmap(bitmap)
-            }
+        sdkViewModel.portraitImage?.let { bitmap ->
+            mBinding.imgWithPn.setImageBitmap(bitmap)
         }
     }
 
