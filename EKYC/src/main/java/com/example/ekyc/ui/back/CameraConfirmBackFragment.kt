@@ -62,7 +62,6 @@ internal class CameraConfirmBackFragment : BaseDataBindingFragment<FragmentCamer
             mBinding.ivCard.setImageBitmap(bitmap)
         }
 
-
         mBinding.btnRetake.setOnClickListener {
             parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
         }

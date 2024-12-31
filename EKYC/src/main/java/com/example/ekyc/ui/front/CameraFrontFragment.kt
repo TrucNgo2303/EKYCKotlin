@@ -11,6 +11,10 @@ import com.example.ekyc.base.SDKMainViewModel
 import com.example.ekyc.databinding.FragmentCameraFrontBinding
 import com.example.ekyc.utils.extension.addFragment
 import com.example.ekyc.utils.extension.addFragmentWithAnimation
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 internal class CameraFrontFragment :BaseDataBindingFragment<FragmentCameraFrontBinding, CameraFrontViewModel>() {
 
@@ -37,17 +41,43 @@ internal class CameraFrontFragment :BaseDataBindingFragment<FragmentCameraFrontB
         cameraXManager = CameraXManager(requireContext(),preview,this,true,false)
 
         mBinding.btnCamera.setOnClickListener {
+//            cameraXManager.takePicture { bitmap ->
+//                viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
+//                bitmap?.let { capturedBitmap ->
+//                    viewModel.frontImage = capturedBitmap
+//                    Log.d("Bitmap", "Bitmap saved successfully: ${viewModel.frontImage}")
+//
+//                    // Chuyển đến fragment xác nhận sau khi lưu ảnh thành công
+//                    parentFragmentManager.addFragment(fragment = CameraConfirmFrontFragment.newInstance())
+//                }
+//
+//            }
             cameraXManager.takePicture { bitmap ->
-                viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
-                bitmap?.let { capturedBitmap ->
-                    viewModel.frontImage = capturedBitmap
-                    Log.d("Bitmap", "Bitmap saved successfully: ${viewModel.frontImage}")
+                try {
+                    viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
+                    bitmap?.let { capturedBitmap ->
+                        // Sử dụng coroutine để xử lý bitmap ở luồng IO
+                        GlobalScope.launch(Dispatchers.IO) {
+                            try {
+                                viewModel.frontImage = capturedBitmap
+                                Log.d("Bitmap", "Bitmap saved successfully: ${viewModel.frontImage}")
 
-                    // Chuyển đến fragment xác nhận sau khi lưu ảnh thành công
-                    parentFragmentManager.addFragment(fragment = CameraConfirmFrontFragment.newInstance())
+                                // Chuyển đến fragment xác nhận trên luồng chính
+                                withContext(Dispatchers.Main) {
+                                    parentFragmentManager.addFragment(fragment = CameraConfirmFrontFragment.newInstance())
+                                }
+                            } catch (e: Exception) {
+                                Log.e("Bitmap", "Error saving bitmap: ${e.message}")
+                            }
+                        }
+                    } ?: run {
+                        Log.e("CameraX", "Bitmap is null")
+                    }
+                } catch (e: Exception) {
+                    Log.e("CameraX", "Error capturing image: ${e.message}")
                 }
-
             }
+
         }
 
         //Click View Guide

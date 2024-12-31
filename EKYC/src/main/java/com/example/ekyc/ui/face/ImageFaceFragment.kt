@@ -46,10 +46,13 @@ internal class ImageFaceFragment : BaseDataBindingFragment<FragmentImageFaceBind
     }
 
     override fun onLeftIconClick() {
-
+        mBinding.btnClose.setOnClickListener {
+            activity?.finish()
+        }
     }
 
     override fun initialize() {
+        onLeftIconClick()
         // Truy cập ViewModel từ Activity
         viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
 

@@ -57,8 +57,6 @@ internal class CameraBackFragment : BaseDataBindingFragment<FragmentCameraBackBi
 
 
         mBinding.btnCamera.setOnClickListener {
-            cameraXManager.takePicture { bitmap ->
-
                 cameraXManager.takePicture { bitmap ->
                     viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
                     bitmap?.let { capturedBitmap ->
@@ -68,10 +66,7 @@ internal class CameraBackFragment : BaseDataBindingFragment<FragmentCameraBackBi
                         // Chuyển đến fragment xác nhận sau khi lưu ảnh thành công
                         parentFragmentManager.addFragment(fragment = CameraConfirmBackFragment.newInstance())
                     }
-
                 }
-            }
-            parentFragmentManager.addFragment(fragment = CameraConfirmBackFragment.newInstance())
         }
     }
 }

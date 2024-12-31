@@ -143,11 +143,6 @@ internal class CameraFaceConfirmFragment : BaseDataBindingFragment<FragmentCamer
             return true
         } else {
             Toast.makeText(requireContext(), "Khuôn mặt đang không ở giữa, yêu cầu quét lại", Toast.LENGTH_SHORT).show()
-
-            // Đợi 1 giây và thử lại mà không dừng camera
-            Handler(Looper.getMainLooper()).postDelayed({
-                handleFaceCenter(eulerAngleX, eulerAngleY, boundingBox)
-            }, 1000) // Delay 1 giây
         }
         return false
     }
@@ -162,11 +157,6 @@ internal class CameraFaceConfirmFragment : BaseDataBindingFragment<FragmentCamer
             return true
         } else {
             Toast.makeText(requireContext(), "Khuôn mặt đang không ở bên trái, yêu cầu quét lại", Toast.LENGTH_SHORT).show()
-
-            // Đợi 1 giây và thử lại mà không dừng camera
-            Handler(Looper.getMainLooper()).postDelayed({
-                handleFaceLeft(eulerAngleX, eulerAngleY, boundingBox)
-            }, 1000) // Delay 1 giây
         }
         return false
     }
@@ -180,10 +170,6 @@ internal class CameraFaceConfirmFragment : BaseDataBindingFragment<FragmentCamer
             return true
         } else {
             Toast.makeText(requireContext(), "Khuôn mặt đang không ở bên phải, yêu cầu quét lại", Toast.LENGTH_SHORT).show()
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                handleFaceRight(eulerAngleX, eulerAngleY, boundingBox)
-            }, 1000) // Delay 1 giây
         }
         return false
     }
@@ -308,5 +294,6 @@ internal class CameraFaceConfirmFragment : BaseDataBindingFragment<FragmentCamer
     override fun onDestroyView() {
         super.onDestroyView()
         cameraXManager.stopCamera()
+        Log.d("TAG", "onDestroyViewxxx")
     }
 }

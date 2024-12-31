@@ -46,14 +46,6 @@ internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverif
         clickBtn()
     }
     private fun allImage(){
-        // Lấy ảnh mặt trước căn cước
-//        sdkViewModel.frontImage.observe(viewLifecycleOwner) { bitmap ->
-//            // Xử lý ảnh ở đây khi LiveData thay đổi
-//            if (bitmap != null) {
-//                // Sử dụng bitmap ở đây
-//                mBinding.imgFrontSide.setImageBitmap(bitmap)
-//            }
-//        }
         sdkViewModel.frontImage?.let { bitmap ->
             mBinding.imgFrontSide.setImageBitmap(bitmap)
         }
@@ -109,6 +101,10 @@ internal class UnverifiedImageFragment : BaseDataBindingFragment<FragmentUnverif
             mBinding.icFailPnSide.visibility = if (gwMessPortrait.trim() != "Success") View.VISIBLE else View.GONE
             mBinding.icFailPortraitSide.visibility = if (gwMessFace.trim() != "Success") View.VISIBLE else View.GONE
 
+            mBinding.icGoodFrontSide.visibility = if(gwMessFront.trim() == "Success") View.VISIBLE else View.GONE
+            mBinding.icGoodBackSide.visibility = if(gwMessBack.trim() == "Success") View.VISIBLE else View.GONE
+            mBinding.icGoodPortraitSide.visibility = if(gwMessFace.trim() == "Success") View.VISIBLE else View.GONE
+            mBinding.icGoodPnSide.visibility = if(gwMessPortrait.trim() == "Success") View.VISIBLE else View.GONE
 
             mBinding.btnContinueFail.visibility = View.VISIBLE
             mBinding.btnRetryAll.visibility = View.VISIBLE
