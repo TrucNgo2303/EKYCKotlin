@@ -33,7 +33,7 @@ internal class ViewGuideBackFragment : BaseDataBindingFragment<FragmentViewGuide
 
     override fun initialize() {
         mBinding.btnGotIt.setOnClickListener {
-            parentFragmentManager.addFragment(fragment = CameraBackFragment.newInstance())
+            parentFragmentManager.popBackStack()
         }
     }
 }

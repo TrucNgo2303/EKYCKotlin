@@ -16,6 +16,7 @@ import com.example.ekyc.base.SDKMainViewModel
 import com.example.ekyc.databinding.FragmentCameraBackBinding
 import com.example.ekyc.ui.front.CameraConfirmFrontFragment
 import com.example.ekyc.utils.extension.addFragment
+import com.example.ekyc.utils.extension.addFragmentWithAnimation
 
 
 internal class CameraBackFragment : BaseDataBindingFragment<FragmentCameraBackBinding, CameraBackViewModel>() {
@@ -48,7 +49,7 @@ internal class CameraBackFragment : BaseDataBindingFragment<FragmentCameraBackBi
     override fun initialize() {
         onLeftIconClick()
         mBinding.btnViewGuide.setOnClickListener {
-            parentFragmentManager.addFragment(fragment = ViewGuideBackFragment.newInstance())
+            parentFragmentManager.addFragmentWithAnimation(fragment = ViewGuideBackFragment.newInstance())
         }
 
         preview = mBinding.previewView

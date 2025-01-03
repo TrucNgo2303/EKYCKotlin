@@ -41,17 +41,6 @@ internal class CameraFrontFragment :BaseDataBindingFragment<FragmentCameraFrontB
         cameraXManager = CameraXManager(requireContext(),preview,this,true,false)
 
         mBinding.btnCamera.setOnClickListener {
-//            cameraXManager.takePicture { bitmap ->
-//                viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]
-//                bitmap?.let { capturedBitmap ->
-//                    viewModel.frontImage = capturedBitmap
-//                    Log.d("Bitmap", "Bitmap saved successfully: ${viewModel.frontImage}")
-//
-//                    // Chuyển đến fragment xác nhận sau khi lưu ảnh thành công
-//                    parentFragmentManager.addFragment(fragment = CameraConfirmFrontFragment.newInstance())
-//                }
-//
-//            }
             cameraXManager.takePicture { bitmap ->
                 try {
                     viewModel = ViewModelProvider(requireActivity())[SDKMainViewModel::class.java]

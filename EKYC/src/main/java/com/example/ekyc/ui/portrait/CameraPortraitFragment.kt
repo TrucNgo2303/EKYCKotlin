@@ -17,6 +17,7 @@ import com.example.ekyc.databinding.FragmentCameraPortraitBinding
 import com.example.ekyc.ui.front.CameraConfirmFrontFragment
 import com.example.ekyc.ui.front.ViewGuideFrontFragment
 import com.example.ekyc.utils.extension.addFragment
+import com.example.ekyc.utils.extension.addFragmentWithAnimation
 
 internal class CameraPortraitFragment : BaseDataBindingFragment<FragmentCameraPortraitBinding, CameraPortraitViewModel>() {
 
@@ -67,7 +68,7 @@ internal class CameraPortraitFragment : BaseDataBindingFragment<FragmentCameraPo
 
         //Click View Guide
         mBinding.btnViewGuide.setOnClickListener {
-            parentFragmentManager.addFragment(fragment = ViewGuidePortraitFragment.newInstance())
+            parentFragmentManager.addFragmentWithAnimation(fragment = ViewGuidePortraitFragment.newInstance())
         }
     }
 }
